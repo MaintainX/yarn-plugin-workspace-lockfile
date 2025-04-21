@@ -11,14 +11,14 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@yarnpkg/cli": "^3.0.0",
-    "@yarnpkg/core": "^3.0.0",
-    "@yarnpkg/fslib": "^3.0.0",
+    "@yarnpkg/cli": "^4.9.1",
+    "@yarnpkg/core": "^4.4.1",
+    "@yarnpkg/fslib": "^3.1.2",
     "clipanion": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "@yarnpkg/builder": "^3.0.0",
+    "@yarnpkg/builder": "^4.2.1",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "typescript": "^5.0.0"

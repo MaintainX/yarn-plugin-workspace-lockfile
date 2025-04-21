@@ -5,7 +5,7 @@ This Yarn Berry plugin automatically generates workspace-specific lockfiles for 
 ## Installation
 
 ```bash
-yarn plugin import https://raw.githubusercontent.com/MaintainX/yarn-plugin-workspace-lockfile/master/bundles/@yarnpkg/plugin-workspace-lockfile.js
+yarn plugin import https://raw.githubusercontent.com/MaintainX/yarn-plugin-workspace-lockfile/refs/heads/master/bundles/%40yarnpkg/plugin-workspace-lockfile.js
 ```
 
 ## Development
