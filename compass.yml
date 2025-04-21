@@ -1,0 +1,22 @@
+name: yarn-plugin-workspace-lockfile
+id: ari:cloud:compass:84e09587-307e-4b5c-9994-fd2a7738c1c6:component/aa4254cb-a8d8-4ad0-a142-7252d70fe7ae/b5819511-d5b1-4d3f-87d7-ef1149527a75
+description: This Yarn Berry plugin automatically generates workspace-specific lockfiles for each workspace in your monorepo whenever you run `yarn install`. These lockfiles represent what the `yarn.lock` would look like if each workspace was a standalone project.
+configVersion: 1
+typeId: SERVICE
+fields:
+  tier: 4
+links:
+  - name: null
+    type: REPOSITORY
+    url: https://github.com/MaintainX/yarn-plugin-workspace-lockfile
+relationships:
+  DEPENDS_ON: []
+labels:
+  - source:github
+customFields:
+  - name: Default Assignee
+    type: user
+    value: null
+  - name: Project Key
+    type: text
+    value: null
