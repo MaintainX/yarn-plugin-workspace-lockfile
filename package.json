@@ -1,0 +1,27 @@
+{
+  "name": "@maintainx/yarn-plugin-workspace-lockfile",
+  "description": "A Yarn plugin that generates a lockfile for all workspaces",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "builder build plugin",
+    "clean": "builder clean plugin",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@yarnpkg/cli": "^3.0.0",
+    "@yarnpkg/core": "^3.0.0",
+    "@yarnpkg/fslib": "^3.0.0",
+    "clipanion": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@yarnpkg/builder": "^3.0.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "typescript": "^5.0.0"
+  },
+  "packageManager": "yarn@4.9.1"
+}
