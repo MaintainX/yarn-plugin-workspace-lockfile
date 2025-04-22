@@ -1,6 +1,11 @@
 # Yarn Workspace Lockfile Plugin
 
-This Yarn Berry plugin automatically generates workspace-specific lockfiles for each workspace in your monorepo whenever you run `yarn install`. These lockfiles represent what the `yarn.lock` would look like if each workspace was a standalone project.
+This Yarn Berry plugin automatically generates workspace-specific lockfiles for each workspace in your monorepo whenever you run `yarn install`. 
+These lockfiles represent what the `yarn.lock` would look like as much as possible if each workspace was a standalone project (not exactly yarn.lock compatible).
+
+## Work in Progress
+
+This plugin is still under development and not all features have been tested and verified.
 
 ## Installation
 
@@ -33,7 +38,7 @@ The plugin automatically runs after every `yarn install` operation. It will:
 
 You can use these workspace lockfiles for:
 
-1. Dependabot scanning at the workspace level
+1. Dependabot scanning at the workspace level (not yet supported/tested)
 2. GitHub Action cache keys for focused workspace installs
 3. Analyzing dependencies for individual workspaces in CI/CD pipelines when using `yarn workspaces focus`
 
