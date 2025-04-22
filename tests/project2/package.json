@@ -1,0 +1,8 @@
+{
+  "name": "yarn-plugin-workspace-lockfile-test-project2",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "yarn-plugin-workspace-lockfile-test-project1": "workspace:*"
+  }
+}

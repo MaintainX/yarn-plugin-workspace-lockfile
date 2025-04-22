@@ -59,16 +59,17 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
             }
           }
         } else {
-          // For regular dependencies, try to find the package in stored packages
-          const pkgKey = Array.from(project.storedPackages.keys()).find((key) => {
-            const pkg = project.storedPackages.get(key);
-            return pkg && pkg.name === dep.name;
-          });
+          const fullName = dep.scope ? `@${dep.scope}/${dep.name}` : dep.name;
+          const ident = structUtils.parseIdent(fullName);
 
-          const pkg = pkgKey ? project.storedPackages.get(pkgKey) : null;
-          const scope = pkg ? structUtils.parseIdent(pkg.name).scope : dep.scope || "npm";
+          // For non-workspace dependencies, ensure consistent npm: prefix
+          const range = dep.range.startsWith("workspace:")
+            ? dep.range
+            : dep.range.startsWith("npm:")
+              ? dep.range
+              : `npm:${dep.range}`;
 
-          const descriptor = structUtils.makeDescriptor(structUtils.makeIdent(scope, dep.name), dep.range);
+          const descriptor = structUtils.makeDescriptor(ident, range);
           allDeps.add(descriptor);
           report.reportInfo(MessageName.UNNAMED, `Added dependency: ${structUtils.stringifyDescriptor(descriptor)}`);
         }
@@ -79,11 +80,22 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
     const workspaceLockfile = new Map<string, PackageInfo>();
     const processedDeps = new Set<string>();
 
+    // Helper to normalize descriptor keys
+    const normalizeKey = (key: string) => {
+      const descriptor = structUtils.parseDescriptor(key);
+      return descriptor.range.startsWith("workspace:")
+        ? structUtils.stringifyDescriptor(descriptor)
+        : structUtils.stringifyDescriptor(
+            structUtils.makeDescriptor(descriptor, `npm:${descriptor.range.replace(/^npm:/, "")}`),
+          );
+    };
+
     // Process dependencies recursively
     const processDependency = (descriptor: Descriptor) => {
       const descriptorStr = structUtils.stringifyDescriptor(descriptor);
-      if (processedDeps.has(descriptorStr)) return;
-      processedDeps.add(descriptorStr);
+      const normalizedKey = normalizeKey(descriptorStr);
+      if (processedDeps.has(normalizedKey)) return;
+      processedDeps.add(normalizedKey);
 
       // First try to find the resolution in the project's lockfile
       const resolution = project.storedResolutions.get(descriptor.descriptorHash);
@@ -165,20 +177,28 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
     // Generate the lockfile content
     const lockfileContent = Array.from(workspaceLockfile.entries())
       .map(([key, value]) => {
+        const normalizedKey = normalizeKey(key);
+
         const depsStr =
           value.dependencies.size > 0
             ? `  dependencies:\n${Array.from(value.dependencies.entries())
-                .map(([name, range]) => `    "${name}": "${range}"\n`)
+                .map(([name, range]) => {
+                  const depRange = range.startsWith("workspace:") ? range : `npm:${range.replace(/^npm:/, "")}`;
+                  return `    "${name}": "${depRange}"\n`;
+                })
                 .join("")}`
             : "";
         const peerDepsStr =
           value.peerDependencies.size > 0
             ? `  peerDependencies:\n${Array.from(value.peerDependencies.entries())
-                .map(([name, range]) => `    "${name}": "${range}"\n`)
+                .map(([name, range]) => {
+                  const depRange = range.startsWith("workspace:") ? range : `npm:${range.replace(/^npm:/, "")}`;
+                  return `    "${name}": "${depRange}"\n`;
+                })
                 .join("")}`
             : "";
 
-        return `"${key}":\n  version: "${value.version || "unknown"}"\n  resolution: "${
+        return `"${normalizedKey}":\n  version: "${value.version || "unknown"}"\n  resolution: "${
           value.resolution
         }"\n${depsStr}${peerDepsStr}`;
       })

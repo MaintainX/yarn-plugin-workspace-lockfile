@@ -1,0 +1,14 @@
+"@types/lodash@npm:^4":
+  version: "4.17.16"
+  resolution: "@types/lodash@npm:4.17.16"
+
+"lodash@npm:^4.17.21":
+  version: "4.17.21"
+  resolution: "lodash@npm:4.17.21"
+
+"yarn-plugin-workspace-lockfile-test-project1@workspace:*":
+  version: "1.0.0"
+  resolution: "yarn-plugin-workspace-lockfile-test-project1@workspace:tests/project1"
+  dependencies:
+    "@types/lodash": "npm:^4"
+    "lodash": "npm:^4.17.21"

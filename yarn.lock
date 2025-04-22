@@ -2965,12 +2965,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yarn-plugin-workspace-lockfile-test-project1@workspace:tests/project1":
+"yarn-plugin-workspace-lockfile-test-project1@workspace:*, yarn-plugin-workspace-lockfile-test-project1@workspace:tests/project1":
   version: 0.0.0-use.local
   resolution: "yarn-plugin-workspace-lockfile-test-project1@workspace:tests/project1"
   dependencies:
     "@types/lodash": "npm:^4"
     lodash: "npm:^4.17.21"
+  languageName: unknown
+  linkType: soft
+
+"yarn-plugin-workspace-lockfile-test-project2@workspace:tests/project2":
+  version: 0.0.0-use.local
+  resolution: "yarn-plugin-workspace-lockfile-test-project2@workspace:tests/project2"
+  dependencies:
+    yarn-plugin-workspace-lockfile-test-project1: "workspace:*"
   languageName: unknown
   linkType: soft
 

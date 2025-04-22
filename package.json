@@ -6,7 +6,7 @@
   "main": "./src/index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "builder build plugin",
+    "build": "builder build plugin && yarn plugin import ./bundles/@yarnpkg/plugin-workspace-lockfile.js && yarn install",
     "clean": "builder clean plugin",
     "format": "prettier --write ."
   },
@@ -24,5 +24,7 @@
     "typescript": "^5.0.0"
   },
   "packageManager": "yarn@4.9.1",
-  "workspaces": ["tests/*"]
+  "workspaces": [
+    "tests/*"
+  ]
 }
