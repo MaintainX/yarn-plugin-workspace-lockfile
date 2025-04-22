@@ -1,6 +1,6 @@
 # Yarn Workspace Lockfile Plugin
 
-This Yarn Berry plugin automatically generates workspace-specific lockfiles for each workspace in your monorepo whenever you run `yarn install`. 
+This Yarn Berry plugin automatically generates workspace-specific lockfiles for each workspace in your monorepo whenever you run `yarn install`.
 These lockfiles represent what the `yarn.lock` would look like as much as possible if each workspace was a standalone project (not exactly yarn.lock compatible).
 
 ## Work in Progress
@@ -78,11 +78,13 @@ jobs:
 The plugin hooks into Yarn's `afterAllInstalled` lifecycle event to:
 
 1. Collect all dependencies (direct and transitive) for each workspace, including:
+
    - Regular dependencies, devDependencies, and peerDependencies
    - Dependencies from workspace packages, including their nested dependencies
    - Resolving package information from the project's stored packages
 
 2. Build a workspace-specific lockfile by:
+
    - Processing each dependency recursively
    - Extracting resolution information from the main project's lockfile
    - Preserving version, resolution, dependencies, and peer dependencies information

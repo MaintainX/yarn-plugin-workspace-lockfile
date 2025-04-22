@@ -1,5 +1,5 @@
 {
-  "name": "@maintainx/yarn-plugin-workspace-lockfile",
+  "name": "yarn-plugin-workspace-lockfile",
   "description": "A Yarn plugin that generates a lockfile for all workspaces",
   "version": "0.1.0",
   "private": true,
@@ -23,5 +23,6 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "typescript": "^5.0.0"
   },
-  "packageManager": "yarn@4.9.1"
+  "packageManager": "yarn@4.9.1",
+  "workspaces": ["tests/*"]
 }
