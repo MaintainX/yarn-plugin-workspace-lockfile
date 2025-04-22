@@ -114,7 +114,9 @@ Both files use the same format for common fields:
 - Quoted package identifiers: `"@algolia/cache-browser-local-storage@npm:4.24.0"`
 - Unquoted version numbers: `version: 4.24.0`
 - Quoted resolution values: `resolution: "@algolia/cache-browser-local-storage@npm:4.24.0"`
-- Quoted dependency entries: `"@algolia/cache-common": "npm:4.24.0"`
+- Dependencies follow specific quoting rules:
+  - Scoped packages are quoted: `"@algolia/cache-common": "npm:4.24.0"`
+  - Non-scoped packages are not quoted: `fastq: "npm:^1.6.0"`
 - Alphabetical ordering of packages and their dependencies
 
 ### Missing Metadata (Potential Future Additions)

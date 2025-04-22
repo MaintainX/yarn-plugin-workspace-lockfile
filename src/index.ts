@@ -170,7 +170,8 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
                 .sort(([a], [b]) => a.localeCompare(b)) // Sort dependencies alphabetically
                 .map(([name, range]) => {
                   const depRange = range.startsWith("workspace:") ? range : `npm:${range.replace(/^npm:/, "")}`;
-                  return `    "${name}": "${depRange}"\n`;
+                  const quotedName = name.startsWith("@") ? `"${name}"` : name;
+                  return `    ${quotedName}: "${depRange}"\n`;
                 })
                 .join("")}`
             : "";
@@ -180,7 +181,8 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
                 .sort(([a], [b]) => a.localeCompare(b)) // Sort peer dependencies alphabetically
                 .map(([name, range]) => {
                   const depRange = range.startsWith("workspace:") ? range : `npm:${range.replace(/^npm:/, "")}`;
-                  return `    "${name}": "${depRange}"\n`;
+                  const quotedName = name.startsWith("@") ? `"${name}"` : name;
+                  return `    ${quotedName}: "${depRange}"\n`;
                 })
                 .join("")}`
             : "";
