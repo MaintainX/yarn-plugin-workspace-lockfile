@@ -14,6 +14,7 @@ import { ppath, xfs } from "@yarnpkg/fslib";
 interface PackageInfo {
   version: string | null;
   resolution: string;
+  checksum: string | null;
   dependencies: Map<string, string>;
   peerDependencies: Map<string, string>;
 }
@@ -144,6 +145,7 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
       workspaceLockfile.set(normalizedKey, {
         version: pkg.version,
         resolution: structUtils.stringifyLocator(pkg),
+        checksum: pkg.identHash,
         dependencies,
         peerDependencies,
       });
@@ -171,9 +173,9 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
                 .map(([name, range]) => {
                   const depRange = range.startsWith("workspace:") ? range : `npm:${range.replace(/^npm:/, "")}`;
                   const quotedName = name.startsWith("@") ? `"${name}"` : name;
-                  return `    ${quotedName}: "${depRange}"\n`;
+                  return `    ${quotedName}: "${depRange}"`;
                 })
-                .join("")}`
+                .join("\n")}`
             : "";
         const peerDepsStr =
           value.peerDependencies.size > 0
@@ -182,12 +184,22 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
                 .map(([name, range]) => {
                   const depRange = range.startsWith("workspace:") ? range : `npm:${range.replace(/^npm:/, "")}`;
                   const quotedName = name.startsWith("@") ? `"${name}"` : name;
-                  return `    ${quotedName}: "${depRange}"\n`;
+                  return `    ${quotedName}: "${depRange}"`;
                 })
-                .join("")}`
+                .join("\n")}`
             : "";
 
-        return `"${normalizedKey}":\n  version: ${value.version || "unknown"}\n  resolution: "${value.resolution}"\n${depsStr}${peerDepsStr}`;
+        const lines = [
+          `"${normalizedKey}":`,
+          `  version: ${value.version || "unknown"}`,
+          `  resolution: "${value.resolution}"`,
+          depsStr,
+          peerDepsStr,
+          // Not getting the right checksum at this time
+          // value.checksum ? `  checksum: ${value.checksum}` : "",
+        ].filter(Boolean);
+
+        return lines.join("\n") + "\n";
       })
       .join("\n");
 

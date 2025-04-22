@@ -1,0 +1,51 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+ # Yarn Workspace Lockfile Plugin Guidelines
+
+## Core Functionality
+- The plugin generates workspace-specific lockfiles (`yarn.workspace.lock`) for each workspace in a Yarn monorepo
+- Lockfile generation happens after installation and workspace dependency changes
+- Each workspace lockfile contains only the dependencies relevant to that workspace
+
+## Code Structure
+- Keep the core lockfile generation logic in `generateWorkspaceLockfile` function
+- Maintain clear separation between dependency collection, processing, and file writing
+- Use descriptive variable names that reflect Yarn's terminology (e.g., Descriptor, Locator, Ident)
+
+## Logging Standards
+- Use the `enableVerboseLogging` configuration flag for debug messages
+- Important operations (file creation, errors) should always be logged
+- Debug logs should provide insight into dependency processing and resolution
+
+## Dependency Handling
+- Normalize dependency ranges to use consistent `npm:` prefixes
+- Handle workspace dependencies specially, preserving their `workspace:` protocol
+- Process both direct and transitive dependencies from workspace packages
+- Sort dependencies alphabetically for consistent lockfile output
+
+## Error Handling
+- Wrap main operations in try-catch blocks
+- Include both error message and context (e.g., workspace name) in error reports
+- Use Yarn's MessageName.UNNAMED for consistency in reporting
+
+## Configuration
+- Define new configuration options in the ConfigurationValueMap interface
+- Provide clear descriptions and appropriate default values
+- Follow Yarn's SettingsType conventions
+
+## Testing Guidelines
+- Test with both workspace and non-workspace dependencies
+- Verify lockfile generation after all key operations:
+  - Installation
+  - Dependency addition
+  - Dependency removal
+  - Dependency replacement
+- Check both success and error scenarios
+- Projects under folder `tests` can be used to simulate a project with multiple workspaces
+- Run command `yarn build:debug` and inspect yarn.workspace.lock files under the `tests` folder to validate after each modification
+
+## Pre-Commit
+- Run `yarn build` before commiting changes to source control to ensure the latest version of the plugin an lockfiles are comitted

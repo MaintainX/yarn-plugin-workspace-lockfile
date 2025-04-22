@@ -6,8 +6,10 @@
   "main": "./src/index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "builder build plugin && yarn plugin import ./bundles/@yarnpkg/plugin-workspace-lockfile.js && YARN_ENABLE_VERBOSE_LOGGING=1 yarn install",
-    "clean": "builder clean plugin",
+    "build": "yarn clean && builder build plugin && yarn test",
+    "build:debug": "builder  build plugin --source-map --no-minify --metafile && yarn test",
+    "test": "yarn plugin import ./bundles/@yarnpkg/plugin-workspace-lockfile.js && YARN_ENABLE_VERBOSE_LOGGING=1 yarn install",
+    "clean": "rimraf bundles",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -21,6 +23,7 @@
     "@yarnpkg/builder": "^4.2.1",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
+    "rimraf": "^6.0.1",
     "typescript": "^5.0.0"
   },
   "packageManager": "yarn@4.9.1",

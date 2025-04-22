@@ -6,3 +6,7 @@ node_modules
 **/.yarn/install-state.gz
 !.yarn/patches
 !.yarn/releases
+
+# Build
+bundles/*
+!bundles/@yarnpkg/plugin-workspace-lockfile.js
