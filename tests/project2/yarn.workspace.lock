@@ -11,11 +11,7 @@
     "@nodelib/fs.stat": "npm:2.0.5"
     run-parallel: "npm:^1.1.9"
 
-"@nodelib/fs.stat@npm:^2.0.2":
-  version: 2.0.5
-  resolution: "@nodelib/fs.stat@npm:2.0.5"
-
-"@nodelib/fs.stat@npm:2.0.5":
+"@nodelib/fs.stat@npm:2.0.5, @nodelib/fs.stat@npm:^2.0.2":
   version: 2.0.5
   resolution: "@nodelib/fs.stat@npm:2.0.5"
 
@@ -120,7 +116,7 @@
   dependencies:
     tslib: "npm:^2.4.0"
 
-"@yarnpkg/libzip@npm:virtual:b47cca4d97c0981a08b375c3313ac0106aa3e2bad7bd06765b57decb75a48e7bf3a247b09b3898ea9c6c605423c1c8f27979b8bc6cb4a77922a14ccc2fcfcd39#npm:^3.2.1":
+"@yarnpkg/libzip@virtual:b47cca4d97c0981a08b375c3313ac0106aa3e2bad7bd06765b57decb75a48e7bf3a247b09b3898ea9c6c605423c1c8f27979b8bc6cb4a77922a14ccc2fcfcd39#npm:^3.2.1":
   version: 3.2.1
   resolution: "@yarnpkg/libzip@virtual:b47cca4d97c0981a08b375c3313ac0106aa3e2bad7bd06765b57decb75a48e7bf3a247b09b3898ea9c6c605423c1c8f27979b8bc6cb4a77922a14ccc2fcfcd39#npm:3.2.1"
   dependencies:
@@ -208,15 +204,7 @@
   version: 4.2.0
   resolution: "ci-info@npm:4.2.0"
 
-"clipanion@npm:virtual:978e3f6981951e26c20cd9400849acc15892a5cbeea180e08469a2605c9e6b11a19a4c61b428061a0b53e9927678a2b5caccb552526642247beb26c5c670054e#npm:^4.0.0-rc.2":
-  version: 4.0.0-rc.4
-  resolution: "clipanion@virtual:978e3f6981951e26c20cd9400849acc15892a5cbeea180e08469a2605c9e6b11a19a4c61b428061a0b53e9927678a2b5caccb552526642247beb26c5c670054e#npm:4.0.0-rc.4"
-  dependencies:
-    typanion: "npm:^3.8.0"
-  peerDependencies:
-    "@types/typanion": "npm:*"
-
-"clipanion@npm:virtual:b47cca4d97c0981a08b375c3313ac0106aa3e2bad7bd06765b57decb75a48e7bf3a247b09b3898ea9c6c605423c1c8f27979b8bc6cb4a77922a14ccc2fcfcd39#npm:^4.0.0-rc.2":
+"clipanion@virtual:978e3f6981951e26c20cd9400849acc15892a5cbeea180e08469a2605c9e6b11a19a4c61b428061a0b53e9927678a2b5caccb552526642247beb26c5c670054e#npm:^4.0.0-rc.2, clipanion@virtual:b47cca4d97c0981a08b375c3313ac0106aa3e2bad7bd06765b57decb75a48e7bf3a247b09b3898ea9c6c605423c1c8f27979b8bc6cb4a77922a14ccc2fcfcd39#npm:^4.0.0-rc.2":
   version: 4.0.0-rc.4
   resolution: "clipanion@virtual:978e3f6981951e26c20cd9400849acc15892a5cbeea180e08469a2605c9e6b11a19a4c61b428061a0b53e9927678a2b5caccb552526642247beb26c5c670054e#npm:4.0.0-rc.4"
   dependencies:
@@ -386,11 +374,7 @@
   dependencies:
     json-buffer: "npm:3.0.1"
 
-"lodash@npm:^4.17.15":
-  version: 4.17.21
-  resolution: "lodash@npm:4.17.21"
-
-"lodash@npm:^4.17.21":
+"lodash@npm:^4.17.15, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
 
@@ -402,14 +386,7 @@
   version: 1.4.1
   resolution: "merge2@npm:1.4.1"
 
-"micromatch@npm:^4.0.2":
-  version: 4.0.8
-  resolution: "micromatch@npm:4.0.8"
-  dependencies:
-    braces: "npm:^3.0.3"
-    picomatch: "npm:^2.3.1"
-
-"micromatch@npm:^4.0.8":
+"micromatch@npm:^4.0.2, micromatch@npm:^4.0.8":
   version: 4.0.8
   resolution: "micromatch@npm:4.0.8"
   dependencies:
@@ -449,13 +426,7 @@
   version: 6.1.0
   resolution: "normalize-url@npm:6.1.0"
 
-"once@npm:^1.3.1":
-  version: 1.4.0
-  resolution: "once@npm:1.4.0"
-  dependencies:
-    wrappy: "npm:1"
-
-"once@npm:^1.4.0":
+"once@npm:^1.3.1, once@npm:^1.4.0":
   version: 1.4.0
   resolution: "once@npm:1.4.0"
   dependencies:

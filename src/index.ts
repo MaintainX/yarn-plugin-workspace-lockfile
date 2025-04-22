@@ -1,5 +1,6 @@
 import {
   Descriptor,
+  LocatorHash,
   MessageName,
   Plugin,
   Project,
@@ -93,6 +94,7 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
     // Build workspace lockfile entries
     const workspaceLockfile = new Map<string, PackageInfo>();
     const processedDeps = new Set<string>();
+    const resolutionToDescriptors = new Map<LocatorHash, Set<Descriptor>>();
 
     // Helper to normalize descriptor keys
     const normalizeKey = (key: string) => {
@@ -120,6 +122,12 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
         return;
       }
 
+      // Group descriptors by their resolution
+      if (!resolutionToDescriptors.has(resolution)) {
+        resolutionToDescriptors.set(resolution, new Set());
+      }
+      resolutionToDescriptors.get(resolution)!.add(descriptor);
+
       const pkg = project.storedPackages.get(resolution);
       if (!pkg) {
         if (project.configuration.get("enableVerboseLogging")) {
@@ -128,32 +136,51 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
         return;
       }
 
+      // Process dependencies recursively
+      for (const [identStr, dep] of pkg.dependencies) {
+        processDependency(dep);
+      }
+
+      for (const [identStr, dep] of pkg.peerDependencies) {
+        processDependency(dep);
+      }
+    };
+
+    // Process all direct dependencies
+    for (const descriptor of allDeps) {
+      processDependency(descriptor);
+    }
+
+    // Create lockfile entries from grouped resolutions
+    for (const [resolution, descriptors] of resolutionToDescriptors) {
+      const pkg = project.storedPackages.get(resolution);
+      if (!pkg) continue;
+
+      // Create combined key from all descriptors that resolve to this package
+      const descriptorKeys = Array.from(descriptors)
+        .map((d) => structUtils.stringifyDescriptor(d))
+        .sort();
+      const combinedKey = descriptorKeys.join(", ");
+
       // Add the dependency to the workspace lockfile
       const dependencies = new Map<string, string>();
       const peerDependencies = new Map<string, string>();
 
       for (const [identStr, dep] of pkg.dependencies) {
         dependencies.set(structUtils.stringifyIdent(dep), dep.range);
-        processDependency(dep);
       }
 
       for (const [identStr, dep] of pkg.peerDependencies) {
         peerDependencies.set(structUtils.stringifyIdent(dep), dep.range);
-        processDependency(dep);
       }
 
-      workspaceLockfile.set(normalizedKey, {
+      workspaceLockfile.set(combinedKey, {
         version: pkg.version,
         resolution: structUtils.stringifyLocator(pkg),
         checksum: pkg.identHash,
         dependencies,
         peerDependencies,
       });
-    };
-
-    // Process all direct dependencies
-    for (const descriptor of allDeps) {
-      processDependency(descriptor);
     }
 
     if (project.configuration.get("enableVerboseLogging")) {
@@ -164,8 +191,6 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
     const lockfileContent = Array.from(workspaceLockfile.entries())
       .sort(([a], [b]) => a.localeCompare(b)) // Sort entries alphabetically
       .map(([key, value]) => {
-        const normalizedKey = normalizeKey(key);
-
         const depsStr =
           value.dependencies.size > 0
             ? `  dependencies:\n${Array.from(value.dependencies.entries())
@@ -190,7 +215,7 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
             : "";
 
         const lines = [
-          `"${normalizedKey}":`,
+          `"${key}":`,
           `  version: ${value.version || "unknown"}`,
           `  resolution: "${value.resolution}"`,
           depsStr,
