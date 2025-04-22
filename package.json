@@ -6,7 +6,7 @@
   "main": "./src/index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "builder build plugin && yarn plugin import ./bundles/@yarnpkg/plugin-workspace-lockfile.js && yarn install",
+    "build": "builder build plugin && yarn plugin import ./bundles/@yarnpkg/plugin-workspace-lockfile.js && YARN_ENABLE_VERBOSE_LOGGING=1 yarn install",
     "clean": "builder clean plugin",
     "format": "prettier --write ."
   },

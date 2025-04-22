@@ -1,4 +1,14 @@
-import { Descriptor, MessageName, Plugin, Project, Report, StreamReport, structUtils, Workspace } from "@yarnpkg/core";
+import {
+  Descriptor,
+  MessageName,
+  Plugin,
+  Project,
+  Report,
+  SettingsType,
+  StreamReport,
+  structUtils,
+  Workspace,
+} from "@yarnpkg/core";
 import { ppath, xfs } from "@yarnpkg/fslib";
 
 interface PackageInfo {
@@ -26,7 +36,9 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
     const manifest = workspace.manifest;
     for (const depType of ["dependencies", "devDependencies", "peerDependencies"] as const) {
       const deps = manifest.getForScope(depType);
-      report.reportInfo(MessageName.UNNAMED, `Found ${deps.size} ${depType}`);
+      if (project.configuration.get("enableVerboseLogging")) {
+        report.reportInfo(MessageName.UNNAMED, `Found ${deps.size} ${depType}`);
+      }
 
       for (const dep of deps.values()) {
         // Check if it's a workspace dependency
@@ -38,10 +50,12 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
           // For workspace dependencies, use the workspace's manifest
           const descriptor = structUtils.makeDescriptor(structUtils.makeIdent(dep.scope || "", dep.name), dep.range);
           allDeps.add(descriptor);
-          report.reportInfo(
-            MessageName.UNNAMED,
-            `Added workspace dependency: ${structUtils.stringifyDescriptor(descriptor)}`,
-          );
+          if (project.configuration.get("enableVerboseLogging")) {
+            report.reportInfo(
+              MessageName.UNNAMED,
+              `Added workspace dependency: ${structUtils.stringifyDescriptor(descriptor)}`,
+            );
+          }
 
           // Also add all dependencies of the workspace dependency
           for (const innerDepType of ["dependencies", "devDependencies", "peerDependencies"] as const) {
@@ -52,10 +66,12 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
                 innerDep.range,
               );
               allDeps.add(innerDescriptor);
-              report.reportInfo(
-                MessageName.UNNAMED,
-                `Added transitive dependency from workspace: ${structUtils.stringifyDescriptor(innerDescriptor)}`,
-              );
+              if (project.configuration.get("enableVerboseLogging")) {
+                report.reportInfo(
+                  MessageName.UNNAMED,
+                  `Added transitive dependency from workspace: ${structUtils.stringifyDescriptor(innerDescriptor)}`,
+                );
+              }
             }
           }
         } else {
@@ -71,7 +87,9 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
 
           const descriptor = structUtils.makeDescriptor(ident, range);
           allDeps.add(descriptor);
-          report.reportInfo(MessageName.UNNAMED, `Added dependency: ${structUtils.stringifyDescriptor(descriptor)}`);
+          if (project.configuration.get("enableVerboseLogging")) {
+            report.reportInfo(MessageName.UNNAMED, `Added dependency: ${structUtils.stringifyDescriptor(descriptor)}`);
+          }
         }
       }
     }
@@ -100,71 +118,40 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
       // First try to find the resolution in the project's lockfile
       const resolution = project.storedResolutions.get(descriptor.descriptorHash);
       if (!resolution) {
-        // If no resolution found, try to find the package directly
-        const pkgKey = Array.from(project.storedPackages.keys()).find((key) => {
-          const pkg = project.storedPackages.get(key);
-          return pkg && pkg.identHash === descriptor.identHash;
-        });
-
-        if (!pkgKey) {
+        if (project.configuration.get("enableVerboseLogging")) {
           report.reportInfo(MessageName.UNNAMED, `No resolution found for ${descriptorStr}`);
-          return;
         }
-
-        const pkg = project.storedPackages.get(pkgKey);
-        if (!pkg) {
-          report.reportInfo(MessageName.UNNAMED, `No package found for ${descriptorStr}`);
-          return;
-        }
-
-        // Add the dependency to the workspace lockfile
-        const dependencies = new Map<string, string>();
-        const peerDependencies = new Map<string, string>();
-
-        for (const [identStr, dep] of pkg.dependencies) {
-          dependencies.set(structUtils.stringifyIdent(dep), dep.range);
-          processDependency(dep);
-        }
-
-        for (const [identStr, dep] of pkg.peerDependencies) {
-          peerDependencies.set(structUtils.stringifyIdent(dep), dep.range);
-          processDependency(dep);
-        }
-
-        workspaceLockfile.set(descriptorStr, {
-          version: pkg.version,
-          resolution: structUtils.stringifyLocator(pkg),
-          dependencies,
-          peerDependencies,
-        });
-      } else {
-        const pkg = project.storedPackages.get(resolution);
-        if (!pkg) {
-          report.reportInfo(MessageName.UNNAMED, `No package found for ${descriptorStr}`);
-          return;
-        }
-
-        // Add the dependency to the workspace lockfile
-        const dependencies = new Map<string, string>();
-        const peerDependencies = new Map<string, string>();
-
-        for (const [identStr, dep] of pkg.dependencies) {
-          dependencies.set(structUtils.stringifyIdent(dep), dep.range);
-          processDependency(dep);
-        }
-
-        for (const [identStr, dep] of pkg.peerDependencies) {
-          peerDependencies.set(structUtils.stringifyIdent(dep), dep.range);
-          processDependency(dep);
-        }
-
-        workspaceLockfile.set(descriptorStr, {
-          version: pkg.version,
-          resolution: structUtils.stringifyLocator(pkg),
-          dependencies,
-          peerDependencies,
-        });
+        return;
       }
+
+      const pkg = project.storedPackages.get(resolution);
+      if (!pkg) {
+        if (project.configuration.get("enableVerboseLogging")) {
+          report.reportInfo(MessageName.UNNAMED, `No package found for ${descriptorStr}`);
+        }
+        return;
+      }
+
+      // Add the dependency to the workspace lockfile
+      const dependencies = new Map<string, string>();
+      const peerDependencies = new Map<string, string>();
+
+      for (const [identStr, dep] of pkg.dependencies) {
+        dependencies.set(structUtils.stringifyIdent(dep), dep.range);
+        processDependency(dep);
+      }
+
+      for (const [identStr, dep] of pkg.peerDependencies) {
+        peerDependencies.set(structUtils.stringifyIdent(dep), dep.range);
+        processDependency(dep);
+      }
+
+      workspaceLockfile.set(normalizedKey, {
+        version: pkg.version,
+        resolution: structUtils.stringifyLocator(pkg),
+        dependencies,
+        peerDependencies,
+      });
     };
 
     // Process all direct dependencies
@@ -172,7 +159,9 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
       processDependency(descriptor);
     }
 
-    report.reportInfo(MessageName.UNNAMED, `Generated ${workspaceLockfile.size} entries for workspace lockfile`);
+    if (project.configuration.get("enableVerboseLogging")) {
+      report.reportInfo(MessageName.UNNAMED, `Generated ${workspaceLockfile.size} entries for workspace lockfile`);
+    }
 
     // Generate the lockfile content
     const lockfileContent = Array.from(workspaceLockfile.entries())
@@ -214,7 +203,20 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
   }
 }
 
+declare module "@yarnpkg/core" {
+  interface ConfigurationValueMap {
+    enableVerboseLogging: boolean;
+  }
+}
+
 const plugin: Plugin = {
+  configuration: {
+    enableVerboseLogging: {
+      description: "If true, enables verbose logging for workspace lockfile generation",
+      type: SettingsType.BOOLEAN,
+      default: false,
+    },
+  },
   hooks: {
     async afterAllInstalled(project: Project, opts: { report: Report }) {
       for (const workspace of project.workspaces) {
