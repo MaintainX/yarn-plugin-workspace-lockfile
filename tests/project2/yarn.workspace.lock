@@ -116,17 +116,6 @@
   dependencies:
     tslib: "npm:^2.4.0"
 
-"@yarnpkg/libzip@virtual:b47cca4d97c0981a08b375c3313ac0106aa3e2bad7bd06765b57decb75a48e7bf3a247b09b3898ea9c6c605423c1c8f27979b8bc6cb4a77922a14ccc2fcfcd39#npm:^3.2.1":
-  version: 3.2.1
-  resolution: "@yarnpkg/libzip@virtual:b47cca4d97c0981a08b375c3313ac0106aa3e2bad7bd06765b57decb75a48e7bf3a247b09b3898ea9c6c605423c1c8f27979b8bc6cb4a77922a14ccc2fcfcd39#npm:3.2.1"
-  dependencies:
-    "@types/emscripten": "npm:^1.39.6"
-    "@yarnpkg/fslib": "npm:^3.1.2"
-    tslib: "npm:^2.4.0"
-  peerDependencies:
-    "@types/yarnpkg__fslib": "npm:*"
-    "@yarnpkg/fslib": "npm:^3.1.2"
-
 "@yarnpkg/parsers@npm:^3.0.3":
   version: 3.0.3
   resolution: "@yarnpkg/parsers@npm:3.0.3"
@@ -203,14 +192,6 @@
 "ci-info@npm:^4.0.0":
   version: 4.2.0
   resolution: "ci-info@npm:4.2.0"
-
-"clipanion@virtual:978e3f6981951e26c20cd9400849acc15892a5cbeea180e08469a2605c9e6b11a19a4c61b428061a0b53e9927678a2b5caccb552526642247beb26c5c670054e#npm:^4.0.0-rc.2, clipanion@virtual:b47cca4d97c0981a08b375c3313ac0106aa3e2bad7bd06765b57decb75a48e7bf3a247b09b3898ea9c6c605423c1c8f27979b8bc6cb4a77922a14ccc2fcfcd39#npm:^4.0.0-rc.2":
-  version: 4.0.0-rc.4
-  resolution: "clipanion@virtual:978e3f6981951e26c20cd9400849acc15892a5cbeea180e08469a2605c9e6b11a19a4c61b428061a0b53e9927678a2b5caccb552526642247beb26c5c670054e#npm:4.0.0-rc.4"
-  dependencies:
-    typanion: "npm:^3.8.0"
-  peerDependencies:
-    "@types/typanion": "npm:*"
 
 "clone-response@npm:^1.0.2":
   version: 1.0.3

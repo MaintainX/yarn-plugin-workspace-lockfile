@@ -157,9 +157,15 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
       if (!pkg) continue;
 
       // Create combined key from all descriptors that resolve to this package
+      // Filter out virtual dependencies
       const descriptorKeys = Array.from(descriptors)
         .map((d) => structUtils.stringifyDescriptor(d))
+        .filter((key) => !key.includes("virtual:"))
         .sort();
+
+      // Skip if all descriptors were virtual
+      if (descriptorKeys.length === 0) continue;
+
       const combinedKey = descriptorKeys.join(", ");
 
       // Add the dependency to the workspace lockfile
