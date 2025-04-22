@@ -20,11 +20,6 @@ interface PackageInfo {
 
 // Function to generate workspace lockfile
 async function generateWorkspaceLockfile(workspace: Workspace, project: Project, report: Report) {
-  // Skip the root workspace
-  if (workspace.cwd === project.cwd) {
-    return;
-  }
-
   const workspaceName = workspace.manifest.raw.name || workspace.cwd;
   report.reportInfo(MessageName.UNNAMED, `Generating lockfile for ${workspaceName}...`);
 
@@ -165,12 +160,14 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
 
     // Generate the lockfile content
     const lockfileContent = Array.from(workspaceLockfile.entries())
+      .sort(([a], [b]) => a.localeCompare(b)) // Sort entries alphabetically
       .map(([key, value]) => {
         const normalizedKey = normalizeKey(key);
 
         const depsStr =
           value.dependencies.size > 0
             ? `  dependencies:\n${Array.from(value.dependencies.entries())
+                .sort(([a], [b]) => a.localeCompare(b)) // Sort dependencies alphabetically
                 .map(([name, range]) => {
                   const depRange = range.startsWith("workspace:") ? range : `npm:${range.replace(/^npm:/, "")}`;
                   return `    "${name}": "${depRange}"\n`;
@@ -180,6 +177,7 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
         const peerDepsStr =
           value.peerDependencies.size > 0
             ? `  peerDependencies:\n${Array.from(value.peerDependencies.entries())
+                .sort(([a], [b]) => a.localeCompare(b)) // Sort peer dependencies alphabetically
                 .map(([name, range]) => {
                   const depRange = range.startsWith("workspace:") ? range : `npm:${range.replace(/^npm:/, "")}`;
                   return `    "${name}": "${depRange}"\n`;
@@ -187,9 +185,7 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
                 .join("")}`
             : "";
 
-        return `"${normalizedKey}":\n  version: "${value.version || "unknown"}"\n  resolution: "${
-          value.resolution
-        }"\n${depsStr}${peerDepsStr}`;
+        return `"${normalizedKey}":\n  version: ${value.version || "unknown"}\n  resolution: "${value.resolution}"\n${depsStr}${peerDepsStr}`;
       })
       .join("\n");
 

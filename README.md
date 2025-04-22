@@ -100,3 +100,28 @@ This ensures that each workspace has its own lockfile that accurately represents
 - Track dependency changes at the workspace level
 - Cache dependencies efficiently in CI/CD pipelines
 - Analyze dependencies for individual workspaces
+
+## Differences between yarn.lock and yarn.workspace.lock
+
+The workspace lockfile aims to be as similar as possible to Yarn's main lockfile format, but there are some key differences:
+
+### Content Scope
+- `yarn.lock`: Contains ALL dependencies from all workspaces and their transitive dependencies
+- `yarn.workspace.lock`: Contains only the dependencies specific to the current workspace and its direct workspace dependencies
+
+### Format Similarities
+Both files use the same format for common fields:
+- Quoted package identifiers: `"@algolia/cache-browser-local-storage@npm:4.24.0"`
+- Unquoted version numbers: `version: 4.24.0`
+- Quoted resolution values: `resolution: "@algolia/cache-browser-local-storage@npm:4.24.0"`
+- Quoted dependency entries: `"@algolia/cache-common": "npm:4.24.0"`
+- Alphabetical ordering of packages and their dependencies
+
+### Missing Metadata (Potential Future Additions)
+The following fields from `yarn.lock` are currently not included in `yarn.workspace.lock`:
+- `checksum`: Package integrity checksums
+- `languageName`: The language of the package (e.g., "node")
+- `linkType`: How the package should be linked (e.g., "hard")
+- `__metadata`: Top-level metadata about the lockfile itself (e.g., version, cacheKey)
+
+These metadata fields could be added in future versions if they prove useful for workspace-specific use cases.

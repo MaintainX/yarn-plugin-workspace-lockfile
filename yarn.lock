@@ -2978,6 +2978,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "yarn-plugin-workspace-lockfile-test-project2@workspace:tests/project2"
   dependencies:
+    "@yarnpkg/core": "npm:^4.4.1"
     yarn-plugin-workspace-lockfile-test-project1: "workspace:*"
   languageName: unknown
   linkType: soft
