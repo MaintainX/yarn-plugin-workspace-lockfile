@@ -289,11 +289,11 @@
   version: 4.2.1
   resolution: "@yarnpkg/builder@npm:4.2.1"
   dependencies:
-    "@yarnpkg/cli": "npm:virtual:d1aa54e81063fcc3f63bdb3cdf2034339fa61ebf0bc7c2a3bbb0043761bc49f47e8858e1016b7ba5b19b0d88fa17620ae35827385985f72c78fa4bc3ae08a61c#npm:^4.7.0"
+    "@yarnpkg/cli": "npm:^4.7.0"
     "@yarnpkg/core": "npm:^4.2.1"
     "@yarnpkg/fslib": "npm:^3.1.2"
     chalk: "npm:^3.0.0"
-    clipanion: "npm:virtual:d1aa54e81063fcc3f63bdb3cdf2034339fa61ebf0bc7c2a3bbb0043761bc49f47e8858e1016b7ba5b19b0d88fa17620ae35827385985f72c78fa4bc3ae08a61c#npm:^4.0.0-rc.2"
+    clipanion: "npm:^4.0.0-rc.2"
     esbuild: "npm:esbuild-wasm@^0.23.0"
     semver: "npm:^7.1.2"
     tslib: "npm:^2.4.0"
@@ -348,13 +348,13 @@
     "@types/semver": "npm:^7.1.0"
     "@types/treeify": "npm:^1.0.0"
     "@yarnpkg/fslib": "npm:^3.1.2"
-    "@yarnpkg/libzip": "npm:virtual:b47cca4d97c0981a08b375c3313ac0106aa3e2bad7bd06765b57decb75a48e7bf3a247b09b3898ea9c6c605423c1c8f27979b8bc6cb4a77922a14ccc2fcfcd39#npm:^3.2.1"
+    "@yarnpkg/libzip": "npm:^3.2.1"
     "@yarnpkg/parsers": "npm:^3.0.3"
     "@yarnpkg/shell": "npm:^4.1.2"
     camelcase: "npm:^5.3.1"
     chalk: "npm:^3.0.0"
     ci-info: "npm:^4.0.0"
-    clipanion: "npm:virtual:b47cca4d97c0981a08b375c3313ac0106aa3e2bad7bd06765b57decb75a48e7bf3a247b09b3898ea9c6c605423c1c8f27979b8bc6cb4a77922a14ccc2fcfcd39#npm:^4.0.0-rc.2"
+    clipanion: "npm:^4.0.0-rc.2"
     cross-spawn: "npm:^7.0.3"
     diff: "npm:^5.1.0"
     dotenv: "npm:^16.3.1"
@@ -750,7 +750,7 @@
     "@yarnpkg/fslib": "npm:^3.1.2"
     "@yarnpkg/parsers": "npm:^3.0.3"
     chalk: "npm:^3.0.0"
-    clipanion: "npm:virtual:978e3f6981951e26c20cd9400849acc15892a5cbeea180e08469a2605c9e6b11a19a4c61b428061a0b53e9927678a2b5caccb552526642247beb26c5c670054e#npm:^4.0.0-rc.2"
+    clipanion: "npm:^4.0.0-rc.2"
     cross-spawn: "npm:^7.0.3"
     fast-glob: "npm:^3.2.2"
     micromatch: "npm:^4.0.2"
@@ -1211,7 +1211,7 @@
   resolution: "http-proxy-agent@npm:7.0.2"
   dependencies:
     agent-base: "npm:^7.1.0"
-    debug: "npm:virtual:643ed7cc338bcf145a82d8b05b3bef6bcf150ca545df386225596f10ce53cc90b88b3ca83e348ade1ccea5f3f8e76c92d2f0e2ba544da60d40aff9921c56872d#npm:^4.3.4"
+    debug: "npm:^4.3.4"
 
 "http2-wrapper@npm:^1.0.0-beta.5.2":
   version: 1.0.3
@@ -1225,7 +1225,7 @@
   resolution: "https-proxy-agent@npm:7.0.6"
   dependencies:
     agent-base: "npm:^7.1.2"
-    debug: "npm:virtual:27a95c269073dbdd4169a09f0c8f5e379b1ac1b07300e8a51e15eab9c87a24784c6fb87a66f9ef68f023cbbb1b0273be8de13d79e98ff26129a71ca366ad636d#npm:4"
+    debug: "npm:4"
 
 "iconv-lite@npm:^0.6.2":
   version: 0.6.3
@@ -1666,7 +1666,7 @@
   resolution: "react-devtools-core@npm:4.28.5"
   dependencies:
     shell-quote: "npm:^1.6.1"
-    ws: "npm:virtual:064d121dfd458cad9d1879c6bbca027a4ab0fd0870ad99c550e70922eed8266f00c4a7a5986bf8132bfada7297781f842c3812868a51228aa3fb6291f3b2dc5c#npm:^7"
+    ws: "npm:^7"
 
 "react-reconciler@npm:^0.26.2":
   version: 0.26.2
@@ -1798,7 +1798,7 @@
   resolution: "socks-proxy-agent@npm:8.0.5"
   dependencies:
     agent-base: "npm:^7.1.2"
-    debug: "npm:virtual:24d77a90dc1fee92041c11fdca11e639d1458b65cd9b3c02a0f7b9567074b58e03d42fdba3d33c78fbcb8aee2b579eafd837d23a76e5cc99482d6d22584e2d66#npm:^4.3.4"
+    debug: "npm:^4.3.4"
     socks: "npm:^2.8.3"
 
 "socks@npm:^2.8.3":
@@ -1937,7 +1937,7 @@
   resolution: "tuf-js@npm:3.0.1"
   dependencies:
     "@tufjs/models": "npm:3.0.1"
-    debug: "npm:virtual:9135d15fbd4ca78a6cf4f7e7b213502a98134622605a53a87a8eb844cf2ad82c41aa23512b1e1489a0a0cf41f91202924d435e0f0dacd520a1b105611cc22a89#npm:^4.3.6"
+    debug: "npm:^4.3.6"
     make-fetch-happen: "npm:^14.0.1"
 
 "tunnel@npm:^0.0.6":

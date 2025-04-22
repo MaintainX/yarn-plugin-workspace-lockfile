@@ -173,11 +173,25 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
       const peerDependencies = new Map<string, string>();
 
       for (const [identStr, dep] of pkg.dependencies) {
-        dependencies.set(structUtils.stringifyIdent(dep), dep.range);
+        const range = dep.range.startsWith("virtual:")
+          ? `npm:${dep.range.replace(/^virtual:[^#]+#npm:/, "")}`
+          : dep.range.startsWith("workspace:")
+            ? dep.range
+            : dep.range.startsWith("npm:")
+              ? dep.range
+              : `npm:${dep.range}`;
+        dependencies.set(structUtils.stringifyIdent(dep), range);
       }
 
       for (const [identStr, dep] of pkg.peerDependencies) {
-        peerDependencies.set(structUtils.stringifyIdent(dep), dep.range);
+        const range = dep.range.startsWith("virtual:")
+          ? `npm:${dep.range.replace(/^virtual:[^#]+#npm:/, "")}`
+          : dep.range.startsWith("workspace:")
+            ? dep.range
+            : dep.range.startsWith("npm:")
+              ? dep.range
+              : `npm:${dep.range}`;
+        peerDependencies.set(structUtils.stringifyIdent(dep), range);
       }
 
       workspaceLockfile.set(combinedKey, {
