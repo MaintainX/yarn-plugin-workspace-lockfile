@@ -337,7 +337,6 @@
     tslib: "npm:^2.4.0"
     typanion: "npm:^3.14.0"
   peerDependencies:
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/core": "npm:^4.4.1"
 
 "@yarnpkg/core@npm:^4.4.1":
@@ -375,7 +374,6 @@
   version: 2.0.5
   resolution: "@yarnpkg/extensions@npm:2.0.5"
   peerDependencies:
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/core": "npm:^4.2.1"
 
 "@yarnpkg/fslib@npm:^3.1.2":
@@ -390,8 +388,6 @@
   dependencies:
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/ink": "npm:*"
-    "@types/react": "npm:*"
     ink: "npm:^3.0.8"
     react: "npm:^17.0.2"
 
@@ -403,7 +399,6 @@
     "@yarnpkg/fslib": "npm:^3.1.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__fslib": "npm:*"
     "@yarnpkg/fslib": "npm:^3.1.2"
 
 "@yarnpkg/nm@npm:^4.0.6":
@@ -427,8 +422,6 @@
   dependencies:
     "@yarnpkg/extensions": "npm:^2.0.5"
   peerDependencies:
-    "@types/yarnpkg__core": "npm:*"
-    "@types/yarnpkg__plugin-patch": "npm:*"
     "@yarnpkg/core": "npm:^4.2.1"
     "@yarnpkg/plugin-patch": "npm:^4.0.2"
 
@@ -442,8 +435,6 @@
     tau-prolog: "npm:^0.2.66"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/cli": "npm:^4.7.0"
     "@yarnpkg/core": "npm:^4.2.1"
 
@@ -455,8 +446,6 @@
     clipanion: "npm:^4.0.0-rc.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/cli": "npm:^4.7.0"
     "@yarnpkg/core": "npm:^4.2.1"
 
@@ -475,9 +464,6 @@
     tslib: "npm:^2.4.0"
     typanion: "npm:^3.14.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
-    "@types/yarnpkg__plugin-git": "npm:*"
     "@yarnpkg/cli": "npm:^4.9.0"
     "@yarnpkg/core": "npm:^4.4.0"
     "@yarnpkg/plugin-git": "npm:^3.1.1"
@@ -489,7 +475,6 @@
     "@yarnpkg/fslib": "npm:^3.1.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/core": "npm:^4.2.1"
 
 "@yarnpkg/plugin-file@npm:^3.0.1":
@@ -500,7 +485,6 @@
     "@yarnpkg/libzip": "npm:^3.1.1"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/core": "npm:^4.2.1"
 
 "@yarnpkg/plugin-github@npm:^3.0.1":
@@ -510,8 +494,6 @@
     "@yarnpkg/fslib": "npm:^3.1.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__core": "npm:*"
-    "@types/yarnpkg__plugin-git": "npm:*"
     "@yarnpkg/core": "npm:^4.2.1"
     "@yarnpkg/plugin-git": "npm:^3.1.1"
 
@@ -521,7 +503,6 @@
   dependencies:
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/core": "npm:^4.2.1"
 
 "@yarnpkg/plugin-init@npm:^4.1.1":
@@ -532,8 +513,6 @@
     clipanion: "npm:^4.0.0-rc.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/cli": "npm:^4.8.0"
     "@yarnpkg/core": "npm:^4.3.0"
 
@@ -551,9 +530,6 @@
     semver: "npm:^7.1.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
-    "@types/yarnpkg__plugin-essentials": "npm:*"
     "@yarnpkg/cli": "npm:^4.7.0"
     "@yarnpkg/core": "npm:^4.2.1"
     "@yarnpkg/plugin-essentials": "npm:^4.3.1"
@@ -565,7 +541,6 @@
     "@yarnpkg/fslib": "npm:^3.1.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/core": "npm:^4.4.0"
 
 "@yarnpkg/plugin-link@npm:^3.0.1":
@@ -575,7 +550,6 @@
     "@yarnpkg/fslib": "npm:^3.1.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/core": "npm:^4.2.1"
 
 "@yarnpkg/plugin-nm@npm:^4.0.6":
@@ -592,8 +566,6 @@
     clipanion: "npm:^4.0.0-rc.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/cli": "npm:^4.7.0"
     "@yarnpkg/core": "npm:^4.2.1"
 
@@ -609,10 +581,6 @@
     tslib: "npm:^2.4.0"
     typanion: "npm:^3.14.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
-    "@types/yarnpkg__plugin-npm": "npm:*"
-    "@types/yarnpkg__plugin-pack": "npm:*"
     "@yarnpkg/cli": "npm:^4.9.0"
     "@yarnpkg/core": "npm:^4.4.0"
     "@yarnpkg/plugin-npm": "npm:^3.1.0"
@@ -630,8 +598,6 @@
     ssri: "npm:^12.0.0"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__core": "npm:*"
-    "@types/yarnpkg__plugin-pack": "npm:*"
     "@yarnpkg/core": "npm:^4.4.1"
     "@yarnpkg/plugin-pack": "npm:^4.0.1"
 
@@ -646,8 +612,6 @@
     micromatch: "npm:^4.0.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/cli": "npm:^4.9.0"
     "@yarnpkg/core": "npm:^4.4.0"
 
@@ -662,8 +626,6 @@
     p-limit: "npm:^2.2.0"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/cli": "npm:^4.8.0"
     "@yarnpkg/core": "npm:^4.3.0"
 
@@ -675,8 +637,6 @@
     clipanion: "npm:^4.0.0-rc.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
     "@yarnpkg/cli": "npm:^4.7.0"
     "@yarnpkg/core": "npm:^4.2.1"
 
@@ -690,9 +650,6 @@
     semver: "npm:^7.1.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
-    "@types/yarnpkg__plugin-essentials": "npm:*"
     "@yarnpkg/cli": "npm:^4.7.0"
     "@yarnpkg/core": "npm:^4.2.1"
     "@yarnpkg/plugin-essentials": "npm:^4.3.1"
@@ -711,9 +668,6 @@
     semver: "npm:^7.1.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
-    "@types/yarnpkg__plugin-git": "npm:*"
     "@yarnpkg/cli": "npm:^4.8.0"
     "@yarnpkg/core": "npm:^4.3.0"
     "@yarnpkg/plugin-git": "npm:^3.1.1"
@@ -729,9 +683,6 @@
     tslib: "npm:^2.4.0"
     typanion: "npm:^3.14.0"
   peerDependencies:
-    "@types/yarnpkg__cli": "npm:*"
-    "@types/yarnpkg__core": "npm:*"
-    "@types/yarnpkg__plugin-git": "npm:*"
     "@yarnpkg/cli": "npm:^4.8.0"
     "@yarnpkg/core": "npm:^4.3.0"
     "@yarnpkg/plugin-git": "npm:^3.1.1"
@@ -955,7 +906,6 @@
   dependencies:
     typanion: "npm:^3.8.0"
   peerDependencies:
-    "@types/typanion": "npm:*"
     typanion: "npm:*"
 
 "clipanion@npm:^4.0.0-rc.2":
@@ -964,7 +914,6 @@
   dependencies:
     typanion: "npm:^3.8.0"
   peerDependencies:
-    "@types/typanion": "npm:*"
     typanion: "npm:*"
 
 "clone-response@npm:^1.0.2":
@@ -1256,8 +1205,6 @@
     chalk: "npm:^4.1.0"
     type-fest: "npm:^0.15.1"
   peerDependencies:
-    "@types/ink": "npm:*"
-    "@types/react": "npm:*"
     ink: "npm:^3.0.0-3"
     react: "npm:^16.5.2 || ^17.0.0"
 
@@ -1289,7 +1236,6 @@
     ws: "npm:^7.5.5"
     yoga-layout-prebuilt: "npm:^1.9.6"
   peerDependencies:
-    "@types/react": "npm:>=16.8.0"
     react: "npm:>=16.8.0"
 
 "ip-address@npm:^9.0.5":
@@ -1612,9 +1558,6 @@
   version: 4.1.0
   resolution: "prettier-plugin-organize-imports@npm:4.1.0"
   peerDependencies:
-    "@types/prettier": "npm:*"
-    "@types/typescript": "npm:*"
-    "@types/vue-tsc": "npm:*"
     prettier: "npm:>=2.0"
     typescript: "npm:>=2.9"
     vue-tsc: "npm:^2.1.0"
@@ -1676,7 +1619,6 @@
     object-assign: "npm:^4.1.1"
     scheduler: "npm:^0.20.2"
   peerDependencies:
-    "@types/react": "npm:*"
     react: "npm:^17.0.2"
 
 "readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0":
@@ -2036,8 +1978,6 @@
   version: 7.5.10
   resolution: "ws@npm:7.5.10"
   peerDependencies:
-    "@types/bufferutil": "npm:*"
-    "@types/utf-8-validate": "npm:*"
     bufferutil: "npm:^4.0.1"
     utf-8-validate: "npm:^5.0.2"
 

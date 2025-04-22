@@ -20,6 +20,15 @@ interface PackageInfo {
   peerDependencies: Map<string, string>;
 }
 
+// Helper function to check if a package is in the main lockfile
+function isPackageInMainLockfile(project: Project, packageName: string, range: string): boolean {
+  const descriptor = structUtils.makeDescriptor(
+    structUtils.parseIdent(packageName),
+    range.startsWith("npm:") ? range : `npm:${range}`,
+  );
+  return project.storedResolutions.has(descriptor.descriptorHash);
+}
+
 // Function to generate workspace lockfile
 async function generateWorkspaceLockfile(workspace: Workspace, project: Project, report: Report) {
   const workspaceName = workspace.manifest.raw.name || workspace.cwd;
@@ -184,6 +193,7 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
       }
 
       for (const [identStr, dep] of pkg.peerDependencies) {
+        const depIdent = structUtils.stringifyIdent(dep);
         const range = dep.range.startsWith("virtual:")
           ? `npm:${dep.range.replace(/^virtual:[^#]+#npm:/, "")}`
           : dep.range.startsWith("workspace:")
@@ -191,7 +201,21 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
             : dep.range.startsWith("npm:")
               ? dep.range
               : `npm:${dep.range}`;
-        peerDependencies.set(structUtils.stringifyIdent(dep), range);
+
+        // Skip @types/* peer dependencies that aren't in the main lockfile
+        if (depIdent.startsWith("@types/")) {
+          if (!isPackageInMainLockfile(project, depIdent, range)) {
+            if (project.configuration.get("enableVerboseLogging")) {
+              report.reportInfo(
+                MessageName.UNNAMED,
+                `Skipping @types peer dependency not in main lockfile: ${depIdent}@${range}`,
+              );
+            }
+            continue;
+          }
+        }
+
+        peerDependencies.set(depIdent, range);
       }
 
       workspaceLockfile.set(combinedKey, {
