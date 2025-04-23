@@ -5,11 +5,11 @@ import {
   MessageName,
   Plugin,
   Project,
-  Report,
   SettingsType,
   structUtils,
   Workspace,
 } from "@yarnpkg/core";
+import { InstallOptions } from "@yarnpkg/core/lib/Project";
 import { ppath, xfs } from "@yarnpkg/fslib";
 
 interface PackageInfo {
@@ -24,7 +24,7 @@ interface PackageInfo {
 }
 
 // Function to generate workspace lockfile
-async function generateWorkspaceLockfile(workspace: Workspace, project: Project, report: Report) {
+async function generateWorkspaceLockfile(workspace: Workspace, project: Project, { report, immutable }: InstallOptions) {
   const workspaceName = workspace.manifest.raw.name || workspace.cwd;
   report.reportInfo(MessageName.UNNAMED, `Generating lockfile for ${workspaceName}...`);
 
@@ -292,8 +292,21 @@ ${lockfilePackages}`;
 
     // Write the workspace lockfile
     const workspaceLockfilePath = ppath.join(workspace.cwd, "yarn.workspace.lock");
-    await xfs.writeFilePromise(workspaceLockfilePath, lockfileContent);
-    report.reportInfo(MessageName.UNNAMED, `Created ${workspaceLockfilePath}`);
+
+    if (immutable) {
+      const existingLockfile = await xfs.readFilePromise(workspaceLockfilePath, "utf-8");
+      if (existingLockfile === lockfileContent) {
+        return;
+      }
+
+      report.reportError(
+        MessageName.UNNAMED,
+        `The lockfile ${workspaceLockfilePath} would have been modified by this install, which is explicitly forbidden`,
+      );
+    } else {
+      await xfs.writeFilePromise(workspaceLockfilePath, lockfileContent);
+      report.reportInfo(MessageName.UNNAMED, `Created ${workspaceLockfilePath}`);
+    }
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     report.reportError(MessageName.UNNAMED, `Failed to generate lockfile for ${workspaceName}: ${errorMessage}`);
@@ -315,14 +328,14 @@ const plugin: Plugin = {
     },
   },
   hooks: {
-    async afterAllInstalled(project: Project, opts: { report: Report; persistProject?: boolean }) {
+    async afterAllInstalled(project: Project, opts: InstallOptions) {
       // This can be false when doing a focused install since not all workspaces are installed
       if (opts.persistProject === false) {
         return;
       }
 
       for (const workspace of project.workspaces) {
-        await generateWorkspaceLockfile(workspace, project, opts.report);
+        await generateWorkspaceLockfile(workspace, project, opts);
       }
     },
   },
