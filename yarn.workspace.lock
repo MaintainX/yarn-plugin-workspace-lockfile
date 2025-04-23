@@ -1279,6 +1279,7 @@
     ws: "npm:^7.5.5"
     yoga-layout-prebuilt: "npm:^1.9.6"
   peerDependencies:
+    "@types/react": ">=16.8.0"
     react: ">=16.8.0"
 
 "ip-address@npm:^9.0.5":

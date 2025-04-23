@@ -15,18 +15,8 @@ import { ppath, xfs } from "@yarnpkg/fslib";
 interface PackageInfo {
   version: string | null;
   resolution: string;
-  checksum: string | null;
   dependencies: Map<string, string>;
   peerDependencies: Map<string, string>;
-}
-
-// Helper function to check if a package is in the main lockfile
-function isPackageInMainLockfile(project: Project, packageName: string, range: string): boolean {
-  const descriptor = structUtils.makeDescriptor(
-    structUtils.parseIdent(packageName),
-    range.startsWith("npm:") ? range : `npm:${range}`,
-  );
-  return project.storedResolutions.has(descriptor.descriptorHash);
 }
 
 // Function to generate workspace lockfile
@@ -207,12 +197,12 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
 
         // Skip @types/* peer dependencies that aren't in the main lockfile
         if (depIdent.startsWith("@types/")) {
-          if (!isPackageInMainLockfile(project, depIdent, range)) {
+          // This is likely a peer dependency added by https://github.com/yarnpkg/berry/blob/master/packages/plugin-typescript/README.md
+          // We can skip them since they're not required by the workspace
+          // TODO:: Find a better way to check if it's a peer dependency added by the typescript plugin
+          if (pkg.peerDependenciesMeta.get(depIdent)?.optional && dep.range === "*") {
             if (project.configuration.get("enableVerboseLogging")) {
-              report.reportInfo(
-                MessageName.UNNAMED,
-                `Skipping @types peer dependency not in main lockfile: ${depIdent}@${range}`,
-              );
+              report.reportInfo(MessageName.UNNAMED, `Skipping optional @types peer dependency: ${depIdent}@${range}`);
             }
             continue;
           }
@@ -224,7 +214,6 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
       workspaceLockfile.set(combinedKey, {
         version: pkg.version,
         resolution: structUtils.stringifyLocator(pkg),
-        checksum: pkg.identHash,
         dependencies,
         peerDependencies,
       });
@@ -269,8 +258,6 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
           `  resolution: "${value.resolution}"`,
           depsStr,
           peerDepsStr,
-          // Not getting the right checksum at this time
-          // value.checksum ? `  checksum: ${value.checksum}` : "",
         ].filter(Boolean);
 
         return lines.join("\n") + "\n";
