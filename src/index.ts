@@ -7,7 +7,6 @@ import {
   Project,
   Report,
   SettingsType,
-  StreamReport,
   structUtils,
   Workspace,
 } from "@yarnpkg/core";
@@ -316,56 +315,15 @@ const plugin: Plugin = {
     },
   },
   hooks: {
-    async afterAllInstalled(project: Project, opts: { report: Report }) {
+    async afterAllInstalled(project: Project, opts: { report: Report; persistProject?: boolean }) {
+      // This can be false when doing a focused install since not all workspaces are installed
+      if (opts.persistProject === false) {
+        return;
+      }
+
       for (const workspace of project.workspaces) {
         await generateWorkspaceLockfile(workspace, project, opts.report);
       }
-    },
-
-    async afterWorkspaceDependencyAddition(
-      workspace: Workspace,
-      target: string,
-      descriptor: Descriptor,
-      strategies: Array<string>,
-    ) {
-      await StreamReport.start(
-        {
-          configuration: workspace.project.configuration,
-          stdout: process.stdout,
-        },
-        async (report) => {
-          await generateWorkspaceLockfile(workspace, workspace.project, report);
-        },
-      );
-    },
-
-    async afterWorkspaceDependencyRemoval(workspace: Workspace, target: string, descriptor: Descriptor) {
-      await StreamReport.start(
-        {
-          configuration: workspace.project.configuration,
-          stdout: process.stdout,
-        },
-        async (report) => {
-          await generateWorkspaceLockfile(workspace, workspace.project, report);
-        },
-      );
-    },
-
-    async afterWorkspaceDependencyReplacement(
-      workspace: Workspace,
-      target: string,
-      fromDescriptor: Descriptor,
-      toDescriptor: Descriptor,
-    ) {
-      await StreamReport.start(
-        {
-          configuration: workspace.project.configuration,
-          stdout: process.stdout,
-        },
-        async (report) => {
-          await generateWorkspaceLockfile(workspace, workspace.project, report);
-        },
-      );
     },
   },
 };

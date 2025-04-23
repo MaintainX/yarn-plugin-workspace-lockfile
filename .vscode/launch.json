@@ -15,6 +15,21 @@
         "YARN_ENABLE_VERBOSE_LOGGING": "1"
       },
       "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Yarn Plugin - Workspace Focus",
+      "preLaunchTask": "npm: build:debug",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["workspaces", "focus", "yarn-plugin-workspace-lockfile"],
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": ["${workspaceFolder}/bundles/**/*.js"],
+      "sourceMaps": true,
+      "env": {
+        "YARN_ENABLE_VERBOSE_LOGGING": "1"
+      },
+      "console": "integratedTerminal"
     }
   ]
 }
