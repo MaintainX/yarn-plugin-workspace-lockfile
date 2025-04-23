@@ -233,12 +233,12 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
 
     // Generate the lockfile content
     const lockfileContent = Array.from(workspaceLockfile.entries())
-      .sort(([a], [b]) => a.localeCompare(b)) // Sort entries alphabetically
+      .sort() // Sort entries alphabetically
       .map(([key, value]) => {
         const depsStr =
           value.dependencies.size > 0
             ? `  dependencies:\n${Array.from(value.dependencies.entries())
-                .sort(([a], [b]) => a.localeCompare(b)) // Sort dependencies alphabetically
+                .sort() // Sort dependencies alphabetically
                 .map(([name, range]) => {
                   const depRange = range.startsWith("workspace:") ? range : `npm:${range.replace(/^npm:/, "")}`;
                   const quotedName = name.startsWith("@") ? `"${name}"` : name;
@@ -249,7 +249,7 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
         const peerDepsStr =
           value.peerDependencies.size > 0
             ? `  peerDependencies:\n${Array.from(value.peerDependencies.entries())
-                .sort(([a], [b]) => a.localeCompare(b)) // Sort peer dependencies alphabetically
+                .sort() // Sort peer dependencies alphabetically
                 .map(([name, range]) => {
                   const depRange = range.startsWith("workspace:") ? range : `${range.replace(/^npm:/, "")}`;
                   // https://stackoverflow.com/a/22235064
