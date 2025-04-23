@@ -1176,6 +1176,10 @@
     agent-base: "npm:^7.1.2"
     debug: "npm:4"
 
+"husky@npm:^9.1.7":
+  version: 9.1.7
+  resolution: "husky@npm:9.1.7"
+
 "iconv-lite@npm:^0.6.2":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"

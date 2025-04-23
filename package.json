@@ -7,10 +7,11 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn clean && builder build plugin && yarn test",
-    "build:debug": "builder  build plugin --source-map --no-minify --metafile && yarn test",
-    "test": "yarn plugin import ./bundles/@yarnpkg/plugin-workspace-lockfile.js && YARN_ENABLE_VERBOSE_LOGGING=1 yarn install",
+    "build:debug": "builder build plugin --source-map --no-minify --metafile",
     "clean": "rimraf bundles",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "YARN_ENABLE_VERBOSE_LOGGING=1 yarn install",
+    "postinstall": "yarn husky"
   },
   "dependencies": {
     "@yarnpkg/cli": "^4.9.1",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@yarnpkg/builder": "^4.2.1",
+    "husky": "^9.1.7",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "rimraf": "^6.0.1",
