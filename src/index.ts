@@ -120,7 +120,6 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
       const descriptorStr = structUtils.stringifyDescriptor(descriptor);
       const normalizedKey = normalizeKey(descriptorStr);
       if (processedDeps.has(normalizedKey)) return;
-      processedDeps.add(normalizedKey);
 
       // First try to find the resolution in the project's lockfile
       const resolution = project.storedResolutions.get(descriptor.descriptorHash);
@@ -144,6 +143,10 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
         }
         return;
       }
+
+      // Add the normalized key to the processed dependencies
+      // Must add it after the checks above since it's possible to miss it for 1 package and find it for the next one
+      processedDeps.add(normalizedKey);
 
       // Process dependencies recursively
       for (const [identStr, dep] of pkg.dependencies) {

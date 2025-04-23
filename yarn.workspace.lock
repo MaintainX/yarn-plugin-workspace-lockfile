@@ -339,7 +339,7 @@
   peerDependencies:
     "@yarnpkg/core": ^4.4.1
 
-"@yarnpkg/core@npm:^4.4.1":
+"@yarnpkg/core@npm:^4.2.1, @yarnpkg/core@npm:^4.4.1":
   version: 4.4.1
   resolution: "@yarnpkg/core@npm:4.4.1"
   dependencies:
@@ -487,6 +487,20 @@
   peerDependencies:
     "@yarnpkg/core": ^4.2.1
 
+"@yarnpkg/plugin-git@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@yarnpkg/plugin-git@npm:3.1.1"
+  dependencies:
+    "@types/semver": "npm:^7.1.0"
+    "@yarnpkg/fslib": "npm:^3.1.2"
+    clipanion: "npm:^4.0.0-rc.2"
+    git-url-parse: "npm:^13.1.0"
+    lodash: "npm:^4.17.15"
+    semver: "npm:^7.1.2"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@yarnpkg/core": ^4.2.1
+
 "@yarnpkg/plugin-github@npm:^3.0.1":
   version: 3.0.1
   resolution: "@yarnpkg/plugin-github@npm:3.0.1"
@@ -600,6 +614,31 @@
   peerDependencies:
     "@yarnpkg/core": ^4.4.1
     "@yarnpkg/plugin-pack": ^4.0.1
+
+"@yarnpkg/plugin-pack@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@yarnpkg/plugin-pack@npm:4.0.1"
+  dependencies:
+    "@yarnpkg/fslib": "npm:^3.1.2"
+    clipanion: "npm:^4.0.0-rc.2"
+    micromatch: "npm:^4.0.2"
+    tar-stream: "npm:^2.0.1"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@yarnpkg/cli": ^4.7.0
+    "@yarnpkg/core": ^4.2.1
+
+"@yarnpkg/plugin-patch@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@yarnpkg/plugin-patch@npm:4.0.2"
+  dependencies:
+    "@yarnpkg/fslib": "npm:^3.1.2"
+    "@yarnpkg/libzip": "npm:^3.1.1"
+    clipanion: "npm:^4.0.0-rc.2"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@yarnpkg/cli": ^4.7.0
+    "@yarnpkg/core": ^4.2.1
 
 "@yarnpkg/plugin-pnp@npm:^4.0.7, @yarnpkg/plugin-pnp@npm:^4.0.8, @yarnpkg/plugin-pnp@npm:^4.1.0":
   version: 4.1.0
@@ -1624,6 +1663,13 @@
     scheduler: "npm:^0.20.2"
   peerDependencies:
     react: ^17.0.2
+
+"react@npm:^17.0.2":
+  version: 17.0.2
+  resolution: "react@npm:17.0.2"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+    object-assign: "npm:^4.1.1"
 
 "readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0":
   version: 3.6.2

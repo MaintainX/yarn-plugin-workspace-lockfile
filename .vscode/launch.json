@@ -11,6 +11,9 @@
       "skipFiles": ["<node_internals>/**"],
       "outFiles": ["${workspaceFolder}/bundles/**/*.js"],
       "sourceMaps": true,
+      "env": {
+        "YARN_ENABLE_VERBOSE_LOGGING": "1"
+      },
       "console": "integratedTerminal"
     }
   ]
