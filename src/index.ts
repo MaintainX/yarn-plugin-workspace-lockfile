@@ -251,9 +251,11 @@ async function generateWorkspaceLockfile(workspace: Workspace, project: Project,
             ? `  peerDependencies:\n${Array.from(value.peerDependencies.entries())
                 .sort(([a], [b]) => a.localeCompare(b)) // Sort peer dependencies alphabetically
                 .map(([name, range]) => {
-                  const depRange = range.startsWith("workspace:") ? range : `npm:${range.replace(/^npm:/, "")}`;
+                  const depRange = range.startsWith("workspace:") ? range : `${range.replace(/^npm:/, "")}`;
+                  // https://stackoverflow.com/a/22235064
+                  const quotedRange = depRange.match(/[:\{\}\[\]\,&*#?<>=!%@\\]/) ? `"${depRange}"` : depRange;
                   const quotedName = name.startsWith("@") ? `"${name}"` : name;
-                  return `    ${quotedName}: "${depRange}"`;
+                  return `    ${quotedName}: ${quotedRange}`;
                 })
                 .join("\n")}`
             : "";
