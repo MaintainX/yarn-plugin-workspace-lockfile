@@ -1,0 +1,26 @@
+name: Build and tests
+
+on:
+  pull_request: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: yarn install
+      - run: yarn build
+      - run: git diff --exit-code
+
+      # Tests
+      - name: Focus install should not affect the lock files
+        run: |
+          yarn workspaces focus yarn-plugin-workspace-lockfile
+          git diff --exit-code
+
+      - name: Immutable install should error if the lock files are changed
+        run: |
+          echo "Not part of lockfile" >> yarn.workspace.lock
+          yarn install --immutable && exit 1 || exit 0
+          git checkout yarn.workspace.lock
