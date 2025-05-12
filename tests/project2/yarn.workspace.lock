@@ -870,7 +870,7 @@ __metadata:
   linkType: hard
 
 "yarn-plugin-workspace-lockfile-test-project1@workspace:*":
-  version: 1.0.0
+  version: 0.0.0-use.local
   resolution: "yarn-plugin-workspace-lockfile-test-project1@workspace:tests/project1"
   dependencies:
     "@types/lodash": "npm:^4"
