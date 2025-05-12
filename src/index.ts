@@ -1,5 +1,6 @@
 import {
   Descriptor,
+  LinkType,
   LocatorHash,
   MessageName,
   Plugin,
@@ -219,7 +220,8 @@ async function generateWorkspaceLockfile(
       }
 
       workspaceLockfile.set(combinedKey, {
-        version: pkg.version,
+        version:
+          pkg.linkType === LinkType.SOFT && pkg.reference.startsWith("workspace:") ? "0.0.0-use.local" : pkg.version,
         resolution: structUtils.stringifyLocator(pkg),
         dependencies,
         peerDependencies,
