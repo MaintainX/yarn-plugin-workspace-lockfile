@@ -1,7 +1,7 @@
 {
   "name": "yarn-plugin-workspace-lockfile",
   "description": "A Yarn plugin that generates a lockfile for all workspaces",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private": true,
   "main": "./src/index.ts",
   "license": "MIT",
