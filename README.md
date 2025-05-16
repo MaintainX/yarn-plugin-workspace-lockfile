@@ -10,7 +10,7 @@ This plugin is still under development and not all features have been tested and
 ## Installation
 
 ```bash
-yarn plugin import https://raw.githubusercontent.com/MaintainX/yarn-plugin-workspace-lockfile/refs/tags/v0.2.4/bundles/%40yarnpkg/plugin-workspace-lockfile.js
+yarn plugin import https://raw.githubusercontent.com/MaintainX/yarn-plugin-workspace-lockfile/refs/tags/v0.2.5/bundles/%40yarnpkg/plugin-workspace-lockfile.js
 ```
 
 ## Development
