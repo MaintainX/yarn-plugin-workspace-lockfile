@@ -127,3 +127,13 @@ The following fields from `yarn.lock` are currently not included in `yarn.worksp
 - `__metadata`: Top-level metadata about the lockfile itself (e.g., version, cacheKey)
 
 These metadata fields could be added in future versions if they prove useful for workspace-specific use cases.
+
+## Publishing
+
+To publish a new version of the plugin, bump the version in `package.json` and in the [Installation section above](#installation).
+Then create a new release on Github with the same name as the new version.
+
+- https://github.com/MaintainX/yarn-plugin-workspace-lockfile/releases/new
+- You can create a new tag right there, give it the same name as the new version
+- Provide a description of the changes you made (or use "Generate release notes" to auto-generate them from Pull Requests)
+- Publish the release as "Pre-release" until we reach version 1.0.0

@@ -25,13 +25,11 @@ interface PackageInfo {
 
 // Function to generate workspace lockfile
 async function generateWorkspaceLockfile(
+  workspaceName: string,
   workspace: Workspace,
   project: Project,
   { report, immutable, cache }: InstallOptions,
 ) {
-  const workspaceName = workspace.manifest.raw.name || workspace.cwd;
-  report.reportInfo(MessageName.UNNAMED, `Generating lockfile for ${workspaceName}...`);
-
   try {
     // Get all dependencies from the workspace
     const allDeps = new Set<Descriptor>();
@@ -339,9 +337,14 @@ const plugin: Plugin = {
         return;
       }
 
-      for (const workspace of project.workspaces) {
-        await generateWorkspaceLockfile(workspace, project, opts);
-      }
+      await opts.report.startTimerPromise(`Workspace lockfiles step`, async () => {
+        for (const workspace of project.workspaces) {
+          const workspaceName = workspace.manifest.raw.name || workspace.cwd;
+          await opts.report.startTimerPromise(`Generating lockfile for ${workspaceName}`, async () => {
+            await generateWorkspaceLockfile(workspaceName, workspace, project, opts);
+          });
+        }
+      });
     },
   },
 };
