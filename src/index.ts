@@ -319,7 +319,7 @@ ${lockfilePackages}`;
 
 interface WorkspaceFocus {
   isWorkspaceFocused: boolean;
-  shouldContinue: boolean;
+  isProduction?: boolean;
   workspaces?: Workspace[];
 }
 
@@ -327,51 +327,77 @@ function processWorkspaceFocus(project: Project, opts: InstallOptions): Workspac
   if (opts.persistProject !== false) {
     return {
       isWorkspaceFocused: false,
-      shouldContinue: true,
     };
   }
 
+  // cli reference: https://yarnpkg.com/cli/workspaces/focus
   const args = process.argv.slice(2);
   const isWorkspaceFocused = args[0] === "workspaces" && args[1] === "focus";
   const isFocusProduction = isWorkspaceFocused && args.some((a) => a === "--production");
+  const isAllWorkspaces = isWorkspaceFocused && args.some((a) => a === "--all" || a === "-A");
+
+  if (!isWorkspaceFocused) {
+    return {
+      isWorkspaceFocused: false,
+    };
+  }
+
+  // If --all is specified, we need to include all workspaces
+  if (isAllWorkspaces) {
+    return {
+      isWorkspaceFocused: true,
+      isProduction: isFocusProduction,
+      workspaces: project.workspaces,
+    };
+  }
+
+  // If --all is not specified, we need to include the workspaces specified in the command
   const workspaces = args.slice(2).filter((a) => !a.startsWith("-"));
   if (workspaces.length === 0) {
     const cwd = ppath.cwd();
     // If no workspaces are specified it will use workspace in the current directory
     const workspace = project.workspacesByCwd.get(cwd);
     if (!workspace) {
-      // This should not happen
-      return {
-        isWorkspaceFocused: true,
-        shouldContinue: false,
-      };
+      throw new Error(`No workspace found in ${cwd}, please specify a workspace or use --all or -A`);
     }
     workspaces.push(workspace.manifest.raw.name);
   }
 
+  // Walk the workspaces to include their dependencies recursively
+  const projectByName = new Map<string, Workspace>(project.workspaces.map((w) => [w.manifest.raw.name, w]));
   const workspaceNames = new Set(workspaces);
   const focusedWorkspaces: Set<Workspace> = new Set();
-  for (const workspace of project.workspaces) {
-    if (workspaceNames.has(workspace.manifest.raw.name)) {
-      focusedWorkspaces.add(workspace);
-      // Also include all "workspace:*" dependencies
-      for (const [identStr, dep] of new Map([
-        ...workspace.manifest.getForScope("dependencies").entries(),
-        ...workspace.manifest.getForScope("devDependencies").entries(),
-      ])) {
-        if (dep.range.startsWith("workspace:")) {
-          const workspace = project.workspaces.find((w) => w.manifest.raw.name === dep.name);
-          if (workspace) {
-            focusedWorkspaces.add(workspace);
-          }
+  function includeWorkspace(workspace: Workspace) {
+    if (focusedWorkspaces.has(workspace)) {
+      return;
+    }
+    focusedWorkspaces.add(workspace);
+    workspaceNames.add(workspace.manifest.raw.name);
+    // Also include all "workspace:*" dependencies
+    for (const [identStr, dep] of new Map([
+      ...workspace.manifest.getForScope("dependencies").entries(),
+      ...workspace.manifest.getForScope("devDependencies").entries(),
+    ])) {
+      if (dep.range.startsWith("workspace:")) {
+        const dependentWorkspace = projectByName.get(dep.name);
+        if (dependentWorkspace) {
+          includeWorkspace(dependentWorkspace);
         }
       }
+    }
+  }
+  for (const workspaceName of workspaceNames) {
+    const workspace = projectByName.get(workspaceName);
+    if (workspace) {
+      includeWorkspace(workspace);
+    } else {
+      throw new Error(`Workspace ${workspaceName} not found in the project`);
     }
   }
 
   return {
     isWorkspaceFocused,
-    shouldContinue: !isFocusProduction,
+    isProduction: isFocusProduction,
     workspaces: Array.from(focusedWorkspaces),
   };
 }
@@ -393,7 +419,9 @@ const plugin: Plugin = {
   hooks: {
     async afterAllInstalled(project: Project, opts: InstallOptions) {
       const workspaceFocus = processWorkspaceFocus(project, opts);
-      if (!workspaceFocus.shouldContinue) {
+      if (workspaceFocus.isWorkspaceFocused && (workspaceFocus.isProduction || !workspaceFocus.workspaces?.length)) {
+        // If we're focused on a production install or no workspaces are specified, we need to skip the lockfile generation
+        // This is because yarn manipulates the manifest in focus mode, so we can't rely on the manifest to generate the lockfile
         return;
       }
       if (workspaceFocus.isWorkspaceFocused && isCI) {
