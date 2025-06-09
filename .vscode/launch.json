@@ -22,7 +22,7 @@
       "name": "Debug Yarn Plugin - Workspace Focus",
       "preLaunchTask": "npm: build:debug",
       "runtimeExecutable": "yarn",
-      "runtimeArgs": ["workspaces", "focus", "yarn-plugin-workspace-lockfile"],
+      "runtimeArgs": ["workspaces", "focus", "yarn-plugin-workspace-lockfile-test-project2"],
       "skipFiles": ["<node_internals>/**"],
       "outFiles": ["${workspaceFolder}/bundles/**/*.js"],
       "sourceMaps": true,

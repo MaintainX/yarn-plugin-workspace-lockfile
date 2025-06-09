@@ -11,6 +11,7 @@ import {
 } from "@yarnpkg/core";
 import { InstallOptions } from "@yarnpkg/core/lib/Project";
 import { ppath, xfs } from "@yarnpkg/fslib";
+import { isCI } from "ci-info";
 
 interface PackageInfo {
   version: string | null;
@@ -28,7 +29,7 @@ async function generateWorkspaceLockfile(
   workspaceName: string,
   workspace: Workspace,
   project: Project,
-  { report, immutable, cache }: InstallOptions,
+  { report, immutable, cache, persistProject }: InstallOptions,
 ) {
   try {
     // Get all dependencies from the workspace
@@ -316,6 +317,65 @@ ${lockfilePackages}`;
   }
 }
 
+interface WorkspaceFocus {
+  isWorkspaceFocused: boolean;
+  shouldContinue: boolean;
+  workspaces?: Workspace[];
+}
+
+function processWorkspaceFocus(project: Project, opts: InstallOptions): WorkspaceFocus {
+  if (opts.persistProject !== false) {
+    return {
+      isWorkspaceFocused: false,
+      shouldContinue: true,
+    };
+  }
+
+  const args = process.argv.slice(2);
+  const isWorkspaceFocused = args[0] === "workspaces" && args[1] === "focus";
+  const isFocusProduction = isWorkspaceFocused && args.some((a) => a === "--production");
+  const workspaces = args.slice(2).filter((a) => !a.startsWith("-"));
+  if (workspaces.length === 0) {
+    const cwd = ppath.cwd();
+    // If no workspaces are specified it will use workspace in the current directory
+    const workspace = project.workspacesByCwd.get(cwd);
+    if (!workspace) {
+      // This should not happen
+      return {
+        isWorkspaceFocused: true,
+        shouldContinue: false,
+      };
+    }
+    workspaces.push(workspace.manifest.raw.name);
+  }
+
+  const workspaceNames = new Set(workspaces);
+  const focusedWorkspaces: Set<Workspace> = new Set();
+  for (const workspace of project.workspaces) {
+    if (workspaceNames.has(workspace.manifest.raw.name)) {
+      focusedWorkspaces.add(workspace);
+      // Also include all "workspace:*" dependencies
+      for (const [identStr, dep] of new Map([
+        ...workspace.manifest.getForScope("dependencies").entries(),
+        ...workspace.manifest.getForScope("devDependencies").entries(),
+      ])) {
+        if (dep.range.startsWith("workspace:")) {
+          const workspace = project.workspaces.find((w) => w.manifest.raw.name === dep.name);
+          if (workspace) {
+            focusedWorkspaces.add(workspace);
+          }
+        }
+      }
+    }
+  }
+
+  return {
+    isWorkspaceFocused,
+    shouldContinue: !isFocusProduction,
+    workspaces: Array.from(focusedWorkspaces),
+  };
+}
+
 declare module "@yarnpkg/core" {
   interface ConfigurationValueMap {
     enableVerboseLogging: boolean;
@@ -332,13 +392,16 @@ const plugin: Plugin = {
   },
   hooks: {
     async afterAllInstalled(project: Project, opts: InstallOptions) {
-      // This can be false when doing a focused install since not all workspaces are installed
-      if (opts.persistProject === false) {
+      const workspaceFocus = processWorkspaceFocus(project, opts);
+      if (!workspaceFocus.shouldContinue) {
         return;
+      }
+      if (workspaceFocus.isWorkspaceFocused && isCI) {
+        opts.immutable = true;
       }
 
       await opts.report.startTimerPromise(`Workspace lockfiles step`, async () => {
-        for (const workspace of project.workspaces) {
+        for (const workspace of workspaceFocus.workspaces ?? project.workspaces) {
           const workspaceName = workspace.manifest.raw.name || workspace.cwd;
           await opts.report.startTimerPromise(`Generating lockfile for ${workspaceName}`, async () => {
             await generateWorkspaceLockfile(workspaceName, workspace, project, opts);
