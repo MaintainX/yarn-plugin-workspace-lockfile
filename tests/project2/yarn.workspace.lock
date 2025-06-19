@@ -540,10 +540,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.15, lodash@npm:^4.17.21":
+"lodash@npm:^4.17.15":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
+  languageName: node
+  linkType: hard
+
+"lodash@patch:lodash@npm%3A4.17.21#~/.yarn/patches/lodash-npm-4.17.21-6382451519.patch":
+  version: 4.17.21
+  resolution: "lodash@patch:lodash@npm%3A4.17.21#~/.yarn/patches/lodash-npm-4.17.21-6382451519.patch::version=4.17.21&hash=a77111"
+  checksum: 10c0/85c8f23d5c6d8b1e25a856690f1cfdcc65aa6a6c64caf759375558330781b4b4fbf9a98edaa3e1c9825c508831fb1f509199b95945dc130d167238adcc1ee985
   languageName: node
   linkType: hard
 
@@ -874,7 +881,7 @@ __metadata:
   resolution: "yarn-plugin-workspace-lockfile-test-project1@workspace:tests/project1"
   dependencies:
     "@types/lodash": "npm:^4"
-    lodash: "npm:^4.17.21"
+    lodash: "npm:patch:lodash@npm%3A4.17.21#~/.yarn/patches/lodash-npm-4.17.21-6382451519.patch"
   checksum: 
   languageName: unknown
   linkType: soft
