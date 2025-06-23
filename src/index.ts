@@ -82,11 +82,8 @@ async function generateWorkspaceLockfile(
           const ident = structUtils.parseIdent(fullName);
 
           // For non-workspace dependencies, ensure consistent npm: prefix
-          const range = dep.range.startsWith("workspace:")
-            ? dep.range
-            : dep.range.startsWith("npm:")
-              ? dep.range
-              : `npm:${dep.range}`;
+          const protocol = dep.range.match(/^([a-z]+):/)?.[1];
+          const range = protocol ? dep.range : `npm:${dep.range}`;
 
           const descriptor = structUtils.makeDescriptor(ident, range);
           allDeps.add(descriptor);

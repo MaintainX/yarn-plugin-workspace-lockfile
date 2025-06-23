@@ -1,0 +1,13 @@
+diff --git a/README.md b/README.md
+index 3ab1a05ce77eb0885d5881ca4a1029b3aa46c5ed..0a7d51c8fda4a92ddae78c1b03482d11b53ee1cd 100644
+--- a/README.md
++++ b/README.md
+@@ -2,6 +2,8 @@
+ 
+ The [Lodash](https://lodash.com/) library exported as [Node.js](https://nodejs.org/) modules.
+ 
++Patch to test workspace lockfile with patches
++
+ ## Installation
+ 
+ Using npm:
