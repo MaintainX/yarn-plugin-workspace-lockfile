@@ -11,7 +11,7 @@ permissions:
 jobs:
   dependabot-auto-fix:
     runs-on: ubuntu-latest
-    # if: github.actor == 'dependabot[bot]' || github.ref == 'refs/heads/dependabot-autofix'
+    if: github.actor == 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,7 +30,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if ! git diff --quiet; then
             git add -A
-            git commit -m "chore: update lockfiles after yarn install [auto-fix]"
+            git commit -m "update lockfiles after yarn install [auto-fix]"
             git push
           fi
 
