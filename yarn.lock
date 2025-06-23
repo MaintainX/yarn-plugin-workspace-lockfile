@@ -490,6 +490,8 @@ __metadata:
     semver: "npm:^7.1.2"
     tslib: "npm:^2.4.0"
     typanion: "npm:^3.14.0"
+  peerDependencies:
+    "@yarnpkg/core": ^4.4.1
   checksum: 10c0/9b454fac4ba7ab7f715d61ad83ad354af0d8308a6683016ac14061429f1533b19029a3a97a1e010da36bd4faf11897d43249a862d6258b0c8a3d7936ffb16630
   languageName: node
   linkType: hard
