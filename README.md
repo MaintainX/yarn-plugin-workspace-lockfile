@@ -121,14 +121,14 @@ Both files use the same format for common fields:
 
 ## Environment Variables
 
-### `YARN_WORKSPACE_LOCKFILE_FORCE_WRITE`
+### `WORKSPACE_LOCKFILE_FORCE_WRITE`
 
 If set to `true`, this environment variable will force the plugin to write workspace lockfiles even when Yarn is run with the `--immutable` flag. This is useful in CI or automation scenarios where you want to ensure lockfiles are always updated, regardless of the immutable setting.
 
 **Example:**
 
 ```sh
-YARN_WORKSPACE_LOCKFILE_FORCE_WRITE=true yarn install --immutable
+WORKSPACE_LOCKFILE_FORCE_WRITE=true yarn install --immutable
 ```
 
 This will override the immutable check and update the `yarn.workspace.lock` files as needed.

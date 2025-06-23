@@ -22,7 +22,7 @@ jobs:
 
       - run: yarn install --no-immutable
         env:
-          YARN_WORKSPACE_LOCKFILE_FORCE_WRITE: true
+          WORKSPACE_LOCKFILE_FORCE_WRITE: true
 
       - name: Commit and push changes if any
         run: |

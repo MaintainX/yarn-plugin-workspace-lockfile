@@ -294,7 +294,7 @@ ${lockfilePackages}`;
     // Write the workspace lockfile
     const workspaceLockfilePath = ppath.join(workspace.cwd, "yarn.workspace.lock");
 
-    const isImmutable = process.env.YARN_WORKSPACE_LOCKFILE_FORCE_WRITE !== "true" && immutable;
+    const isImmutable = process.env.WORKSPACE_LOCKFILE_FORCE_WRITE !== "true" && immutable;
     if (isImmutable) {
       const existingLockfile = await xfs.readFilePromise(workspaceLockfilePath, "utf-8");
       if (existingLockfile === lockfileContent) {
