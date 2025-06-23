@@ -5,7 +5,7 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@algolia/cache-browser-local-storage@npm:4.24.0":
+"@algolia/cache-browser-local-storage@npm:":
   version: 4.24.0
   resolution: "@algolia/cache-browser-local-storage@npm:4.24.0"
   dependencies:
