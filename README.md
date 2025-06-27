@@ -119,14 +119,19 @@ Both files use the same format for common fields:
   - Non-scoped packages are not quoted: `fastq: "npm:^1.6.0"`
 - Alphabetical ordering of packages and their dependencies
 
-### Missing Metadata (Potential Future Additions)
-The following fields from `yarn.lock` are currently not included in `yarn.workspace.lock`:
-- `checksum`: Package integrity checksums
-- `languageName`: The language of the package (e.g., "node")
-- `linkType`: How the package should be linked (e.g., "hard")
-- `__metadata`: Top-level metadata about the lockfile itself (e.g., version, cacheKey)
+## Environment Variables
 
-These metadata fields could be added in future versions if they prove useful for workspace-specific use cases.
+### `WORKSPACE_LOCKFILE_FORCE_WRITE`
+
+If set to `true`, this environment variable will force the plugin to write workspace lockfiles even when Yarn is run with the `--immutable` flag. This is useful in CI or automation scenarios where you want to ensure lockfiles are always updated, regardless of the immutable setting.
+
+**Example:**
+
+```sh
+WORKSPACE_LOCKFILE_FORCE_WRITE=true yarn install --immutable
+```
+
+This will override the immutable check and update the `yarn.workspace.lock` files as needed.
 
 ## Publishing
 
