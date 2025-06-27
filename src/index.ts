@@ -416,6 +416,12 @@ const plugin: Plugin = {
   },
   hooks: {
     async afterAllInstalled(project: Project, opts: InstallOptions) {
+      if (opts.persistProject === false) {
+        // This can be false when doing a focused install since not all workspaces are installed
+        // Disabling workspace focus support for now until https://github.com/MaintainX/yarn-plugin-workspace-lockfile/issues/11 is resolved
+        return;
+      }
+
       const workspaceFocus = processWorkspaceFocus(project, opts);
       if (workspaceFocus.isWorkspaceFocused && (workspaceFocus.isProduction || !workspaceFocus.workspaces?.length)) {
         // If we're focused on a production install or no workspaces are specified, we need to skip the lockfile generation
