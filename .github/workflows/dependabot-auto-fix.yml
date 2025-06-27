@@ -1,8 +1,7 @@
 name: Dependabot Auto Fix and Merge
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  pull_request: {}
 
 permissions:
   contents: write
