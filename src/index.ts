@@ -1,5 +1,6 @@
 import {
   Descriptor,
+  Hooks,
   LinkType,
   LocatorHash,
   MessageName,
@@ -9,9 +10,10 @@ import {
   structUtils,
   Workspace,
 } from "@yarnpkg/core";
-import { InstallOptions } from "@yarnpkg/core/lib/Project";
 import { ppath, xfs } from "@yarnpkg/fslib";
 import { isCI } from "ci-info";
+
+type InstallOptions = Parameters<Exclude<Hooks["afterAllInstalled"], undefined>>[1];
 
 interface PackageInfo {
   version: string | null;
@@ -406,7 +408,7 @@ declare module "@yarnpkg/core" {
   }
 }
 
-const plugin: Plugin = {
+const plugin: Plugin<Hooks> = {
   configuration: {
     enableVerboseLogging: {
       description: "If true, enables verbose logging for workspace lockfile generation",
@@ -415,7 +417,7 @@ const plugin: Plugin = {
     },
   },
   hooks: {
-    async afterAllInstalled(project: Project, opts: InstallOptions) {
+    async afterAllInstalled(project, opts) {
       if (opts.persistProject === false) {
         // This can be false when doing a focused install since not all workspaces are installed
         // Disabling workspace focus support for now until https://github.com/MaintainX/yarn-plugin-workspace-lockfile/issues/11 is resolved
