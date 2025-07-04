@@ -3,44 +3,16 @@
 This Yarn Berry plugin automatically generates workspace-specific lockfiles for each workspace in your monorepo whenever you run `yarn install`.
 These lockfiles represent what the `yarn.lock` would look like as much as possible if each workspace was a standalone project (not exactly yarn.lock compatible).
 
-## Work in Progress
+You can use these workspace lockfiles for:
 
-This plugin is still under development and not all features have been tested and verified.
+- GitHub Action cache keys for focused workspace installs
+- Analyzing dependencies for individual workspaces in CI/CD pipelines when using `yarn workspaces focus`
 
 ## Installation
 
 ```bash
 yarn plugin import https://raw.githubusercontent.com/MaintainX/yarn-plugin-workspace-lockfile/refs/tags/v0.4.0/bundles/%40yarnpkg/plugin-workspace-lockfile.js
 ```
-
-## Development
-
-The plugin is built using `@yarnpkg/builder`, which is the official tool for building Yarn plugins. To develop:
-
-1. Make changes to the source code in `src/`
-2. Run `yarn build` to rebuild the plugin
-3. Run `yarn clean` to clean build artifacts
-
-The builder will:
-
-- Type check your code
-- Bundle all dependencies
-- Generate proper plugin metadata
-- Create CommonJS bundles
-
-## Usage
-
-The plugin automatically runs after every `yarn install` operation. It will:
-
-1. Generate a `yarn.workspace.lock` file for each workspace
-2. Use the same cache as your main project
-3. Preserve workspace-specific dependencies
-
-You can use these workspace lockfiles for:
-
-1. Dependabot scanning at the workspace level (not yet supported/tested)
-2. GitHub Action cache keys for focused workspace installs
-3. Analyzing dependencies for individual workspaces in CI/CD pipelines when using `yarn workspaces focus`
 
 ## Example GitHub Actions Usage
 
@@ -101,24 +73,6 @@ This ensures that each workspace has its own lockfile that accurately represents
 - Cache dependencies efficiently in CI/CD pipelines
 - Analyze dependencies for individual workspaces
 
-## Differences between yarn.lock and yarn.workspace.lock
-
-The workspace lockfile aims to be as similar as possible to Yarn's main lockfile format, but there are some key differences:
-
-### Content Scope
-- `yarn.lock`: Contains ALL dependencies from all workspaces and their transitive dependencies
-- `yarn.workspace.lock`: Contains only the dependencies specific to the current workspace and its direct workspace dependencies
-
-### Format Similarities
-Both files use the same format for common fields:
-- Quoted package identifiers: `"@algolia/cache-browser-local-storage@npm:4.24.0"`
-- Unquoted version numbers: `version: 4.24.0`
-- Quoted resolution values: `resolution: "@algolia/cache-browser-local-storage@npm:4.24.0"`
-- Dependencies follow specific quoting rules:
-  - Scoped packages are quoted: `"@algolia/cache-common": "npm:4.24.0"`
-  - Non-scoped packages are not quoted: `fastq: "npm:^1.6.0"`
-- Alphabetical ordering of packages and their dependencies
-
 ## Environment Variables
 
 ### `WORKSPACE_LOCKFILE_FORCE_WRITE`
@@ -134,6 +88,8 @@ WORKSPACE_LOCKFILE_FORCE_WRITE=true yarn install --immutable
 This will override the immutable check and update the `yarn.workspace.lock` files as needed.
 
 ## Publishing
+
+TODO: Automatically create new releases on merge to master
 
 To publish a new version of the plugin, bump the version in `package.json` and in the [Installation section above](#installation).
 Then create a new release on Github with the same name as the new version.
