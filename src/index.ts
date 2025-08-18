@@ -13,6 +13,13 @@ import {
 import { ppath, xfs } from "@yarnpkg/fslib";
 import { isCI } from "ci-info";
 
+const loggingLevels = {
+  error: 0,
+  warn: 1,
+  info: 2,
+  debug: 3,
+} as const;
+
 type InstallOptions = Parameters<Exclude<Hooks["afterAllInstalled"], undefined>>[1];
 
 interface PackageInfo {
@@ -32,6 +39,7 @@ async function generateWorkspaceLockfile(
   workspace: Workspace,
   project: Project,
   { report, immutable, cache, persistProject }: InstallOptions,
+  { loggingLevelNumber }: { loggingLevelNumber: number },
 ) {
   try {
     // Get all dependencies from the workspace
@@ -41,7 +49,7 @@ async function generateWorkspaceLockfile(
     const manifest = workspace.manifest;
     for (const depType of ["dependencies", "devDependencies", "peerDependencies"] as const) {
       const deps = manifest.getForScope(depType);
-      if (project.configuration.get("enableVerboseLogging")) {
+      if (loggingLevelNumber >= loggingLevels.debug) {
         report.reportInfo(MessageName.UNNAMED, `Found ${deps.size} ${depType}`);
       }
 
@@ -55,7 +63,7 @@ async function generateWorkspaceLockfile(
           // For workspace dependencies, use the workspace's manifest
           const descriptor = structUtils.makeDescriptor(structUtils.makeIdent(dep.scope || "", dep.name), dep.range);
           allDeps.add(descriptor);
-          if (project.configuration.get("enableVerboseLogging")) {
+          if (loggingLevelNumber >= loggingLevels.debug) {
             report.reportInfo(
               MessageName.UNNAMED,
               `Added workspace dependency: ${structUtils.stringifyDescriptor(descriptor)}`,
@@ -71,7 +79,7 @@ async function generateWorkspaceLockfile(
                 innerDep.range,
               );
               allDeps.add(innerDescriptor);
-              if (project.configuration.get("enableVerboseLogging")) {
+              if (loggingLevelNumber >= loggingLevels.debug) {
                 report.reportInfo(
                   MessageName.UNNAMED,
                   `Added transitive dependency from workspace: ${structUtils.stringifyDescriptor(innerDescriptor)}`,
@@ -89,7 +97,7 @@ async function generateWorkspaceLockfile(
 
           const descriptor = structUtils.makeDescriptor(ident, range);
           allDeps.add(descriptor);
-          if (project.configuration.get("enableVerboseLogging")) {
+          if (loggingLevelNumber >= loggingLevels.debug) {
             report.reportInfo(MessageName.UNNAMED, `Added dependency: ${structUtils.stringifyDescriptor(descriptor)}`);
           }
         }
@@ -120,7 +128,7 @@ async function generateWorkspaceLockfile(
       // First try to find the resolution in the project's lockfile
       const resolution = project.storedResolutions.get(descriptor.descriptorHash);
       if (!resolution) {
-        if (project.configuration.get("enableVerboseLogging")) {
+        if (loggingLevelNumber >= loggingLevels.debug) {
           report.reportInfo(MessageName.UNNAMED, `No resolution found for ${descriptorStr}`);
         }
         return;
@@ -134,7 +142,7 @@ async function generateWorkspaceLockfile(
 
       const pkg = project.storedPackages.get(resolution);
       if (!pkg) {
-        if (project.configuration.get("enableVerboseLogging")) {
+        if (loggingLevelNumber >= loggingLevels.debug) {
           report.reportInfo(MessageName.UNNAMED, `No package found for ${descriptorStr}`);
         }
         return;
@@ -207,7 +215,7 @@ async function generateWorkspaceLockfile(
           // We can skip them since they're not required by the workspace
           // TODO:: Find a better way to check if it's a peer dependency added by the typescript plugin
           if (pkg.peerDependenciesMeta.get(depIdent)?.optional && dep.range === "*") {
-            if (project.configuration.get("enableVerboseLogging")) {
+            if (loggingLevelNumber >= loggingLevels.debug) {
               report.reportInfo(MessageName.UNNAMED, `Skipping optional @types peer dependency: ${depIdent}@${range}`);
             }
             continue;
@@ -230,7 +238,7 @@ async function generateWorkspaceLockfile(
       });
     }
 
-    if (project.configuration.get("enableVerboseLogging")) {
+    if (loggingLevelNumber >= loggingLevels.debug) {
       report.reportInfo(MessageName.UNNAMED, `Generated ${workspaceLockfile.size} entries for workspace lockfile`);
     }
 
@@ -309,7 +317,9 @@ ${lockfilePackages}`;
       );
     } else {
       await xfs.writeFilePromise(workspaceLockfilePath, lockfileContent);
-      report.reportInfo(MessageName.UNNAMED, `Created ${workspaceLockfilePath}`);
+      if (loggingLevelNumber >= loggingLevels.info) {
+        report.reportInfo(MessageName.UNNAMED, `Created ${workspaceLockfilePath}`);
+      }
     }
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -404,16 +414,16 @@ function processWorkspaceFocus(project: Project, opts: InstallOptions): Workspac
 
 declare module "@yarnpkg/core" {
   interface ConfigurationValueMap {
-    enableVerboseLogging: boolean;
+    workspaceLockfileLoggingLevel: string;
   }
 }
 
 const plugin: Plugin<Hooks> = {
   configuration: {
-    enableVerboseLogging: {
-      description: "If true, enables verbose logging for workspace lockfile generation",
-      type: SettingsType.BOOLEAN,
-      default: false,
+    workspaceLockfileLoggingLevel: {
+      description: "The logging level for workspace lockfile generation",
+      type: SettingsType.STRING,
+      default: "error",
     },
   },
   hooks: {
@@ -423,6 +433,10 @@ const plugin: Plugin<Hooks> = {
         // Disabling workspace focus support for now until https://github.com/MaintainX/yarn-plugin-workspace-lockfile/issues/11 is resolved
         return;
       }
+
+      const loggingLevel = project.configuration.get("workspaceLockfileLoggingLevel");
+
+      const loggingLevelNumber = loggingLevels[loggingLevel as keyof typeof loggingLevels] ?? loggingLevels.error;
 
       const workspaceFocus = processWorkspaceFocus(project, opts);
       if (workspaceFocus.isWorkspaceFocused && (workspaceFocus.isProduction || !workspaceFocus.workspaces?.length)) {
@@ -437,9 +451,14 @@ const plugin: Plugin<Hooks> = {
       await opts.report.startTimerPromise(`Workspace lockfiles step`, async () => {
         for (const workspace of workspaceFocus.workspaces ?? project.workspaces) {
           const workspaceName = workspace.manifest.raw.name || workspace.cwd;
-          await opts.report.startTimerPromise(`Generating lockfile for ${workspaceName}`, async () => {
-            await generateWorkspaceLockfile(workspaceName, workspace, project, opts);
-          });
+          const generate = async () => {
+            await generateWorkspaceLockfile(workspaceName, workspace, project, opts, { loggingLevelNumber });
+          };
+          if (loggingLevelNumber >= loggingLevels.info) {
+            await opts.report.startTimerPromise(`Generating lockfile for ${workspaceName}`, generate);
+          } else {
+            await generate();
+          }
         }
       });
     },

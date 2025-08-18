@@ -11,7 +11,7 @@ You can use these workspace lockfiles for:
 ## Installation
 
 ```bash
-yarn plugin import https://raw.githubusercontent.com/MaintainX/yarn-plugin-workspace-lockfile/refs/tags/v0.4.0/bundles/%40yarnpkg/plugin-workspace-lockfile.js
+yarn plugin import https://raw.githubusercontent.com/MaintainX/yarn-plugin-workspace-lockfile/refs/tags/v0.5.0/bundles/%40yarnpkg/plugin-workspace-lockfile.js
 ```
 
 ## Example GitHub Actions Usage
@@ -74,6 +74,16 @@ This ensures that each workspace has its own lockfile that accurately represents
 - Analyze dependencies for individual workspaces
 
 ## Environment Variables
+
+### `YARN_WORKSPACE_LOCKFILE_LOGGING_LEVEL`
+
+The logging level for the plugin. Valid values are `error`, `warn`, `info`, and `debug`. Defaults to `error`.
+
+**Example:**
+
+```sh
+YARN_WORKSPACE_LOCKFILE_LOGGING_LEVEL=debug yarn install
+```
 
 ### `WORKSPACE_LOCKFILE_FORCE_WRITE`
 
