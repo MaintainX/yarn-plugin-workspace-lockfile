@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@yarnpkg/core": "^4.4.1",
+    "@yarnpkg/core": "^4.5.0",
     "yarn-plugin-workspace-lockfile-test-project1": "workspace:*"
   }
 }
