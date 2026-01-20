@@ -1,0 +1,21 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>MaintainX/mx-renovate-shared"
+  ],
+  "packageRules": [
+    {
+      "groupName": "Group dependencies",
+      "matchDepTypes": [
+        "dependencies"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
+    }
+  ],
+  "schedule": [
+    "before 2am on Sunday"
+  ]
+}
